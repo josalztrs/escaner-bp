@@ -1,5 +1,10 @@
 {
 	"appId": "io.ionic.starter",
 	"appName": "prueba escaner",
-	"webDir": "dist"
+	"webDir": "dist",
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
 }
