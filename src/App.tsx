@@ -6,10 +6,10 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
-import LoginPage from './pages/login';
+import Inicio from './pages/Inicio';
+import Escaner from './pages/Escaner';
+import LoginPage from './pages/Login';
+import tabBar from './components/TabBar';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -47,28 +47,27 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
-
-        {/* Rutas */}
         <IonRouterOutlet>
           <Route exact path="/login">
             <LoginPage />
           </Route>
           <Route exact path="/tab1">
-            <Tab1 />
+            <Inicio />
           </Route>
           <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route exact path="/tab3">
-            <Tab3 />
+            <Escaner />
           </Route>
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
         </IonRouterOutlet>
+
+        {/* tabBar es una constante JSX, no un componente, por eso Ionic lo reconoce */}
+        {tabBar}
       </IonTabs>
     </IonReactRouter>
   </IonApp>
 );
 
 export default App;
+

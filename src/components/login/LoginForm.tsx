@@ -1,10 +1,25 @@
-import { IonCard, IonCardHeader, IonCardTitle, IonInputOtp, IonItem } from "@ionic/react";
-import { useState, useEffect } from "react";
+import { 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonInputOtp, 
+    IonItem, 
+    IonButton, 
+    IonSpinner, 
+    IonGrid, 
+    IonRow, 
+    IonCol, 
+    IonText,
+    IonContent,
+    IonPage
+} from "@ionic/react";
+import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { CapacitorHttp } from '@capacitor/core';
-// import { useDebugger, DebugConsole } from "../debugger/DebugConsole";
-import "./LoginForm.css";
+import { Preferences } from "@capacitor/preferences";
 
 const LoginForm: React.FC = () => {
+    const history = useHistory();
     const [otpValue, setOtpValue] = useState('');
     const [validationState, setValidationState] = useState<{
         isValid: boolean | null;
@@ -15,22 +30,15 @@ const LoginForm: React.FC = () => {
         isLoading: false,
         error: null,
     });
-    // const { debugLogs, addLog, clearLogs } = useDebugger();
 
     const validateOtp = async (value: string) => {
         if (value.length !== 5) return;
 
         setValidationState({ isValid: null, isLoading: true, error: null });
-        // clearLogs(); // Limpiar logs anteriores
-        
-        try {
-            const url = 'http://172.16.20.63:3001/api/v1/auth/login';
-            const payload = { pin: value };
 
-            // addLog("=== INICIANDO FETCH ===");
-            // addLog("URL:", url);
-            // addLog("Method: POST, Headers: application/json");
-            // addLog("Body/Payload:", payload);
+        try {
+            const url = 'http://10.60.20.5:8014/api/v1/auth/login';
+            const payload = { pin: value };
 
             const response = await CapacitorHttp.post({
                 url: url,
@@ -38,56 +46,45 @@ const LoginForm: React.FC = () => {
                 data: payload,
             });
 
-            // addLog("=== RESPUESTA RECIBIDA ===");
-            // addLog(`Status: ${response.status} | Ok: ${response.status >= 200 && response.status < 300}`);
-
-            // Obtenemos el cuerpo de la respuesta
             const responseData = response.data;
-            // addLog("Body:", responseData);
 
             if (response.status >= 200 && response.status < 300) {
                 let data = responseData;
-                try {
-                    if (typeof data === 'string') {
+                if (typeof data === 'string') {
+                    try {
                         data = JSON.parse(data);
+                    } catch (e) {
+                        console.error("Error parsing JSON:", e);
                     }
-                    // addLog("Body (Parsed JSON):", data);
-                    
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
-                    // addLog("Error al parsear el JSON de la respuesta:", (e as Error).message);
                 }
-                setValidationState({ isValid: data?.isValid ?? false, isLoading: false, error: null });
+
+                if (data?.status === 'correct') {
+                    await Preferences.set({
+                        key: 'credentials',
+                        value: JSON.stringify(data)
+                    });
+
+                    if (data.token) {
+                        await Preferences.set({
+                            key: 'auth_token',
+                            value: data.token
+                        });
+                    }
+
+                    history.push('/tab1');
+                }
+
+                setValidationState({
+                    isValid: data?.status === 'correct',
+                    isLoading: false,
+                    error: data?.status !== 'correct' ? 'PIN incorrecto' : null
+                });
             } else {
-                // addLog("El servidor devolvió un error. Status Code:", response.status);
                 throw new Error(`Error en el servidor: ${response.status}`);
             }
         } catch (err) {
-            // addLog("=== ERROR EN FETCH ===");
-            // addLog((err as Error).message);
             setValidationState({ isValid: false, isLoading: false, error: (err as Error).message });
         }
-    };
-
-    useEffect(() => {
-        if (otpValue.length === 5) {
-            validateOtp(otpValue);
-        } else {
-            setValidationState({ isValid: null, isLoading: false, error: null });
-        }
-    }, [otpValue]);
-
-    const getValidationState = () => {
-        if (validationState.isLoading) {
-            return { class: 'loading', disabled: true };
-        }
-        if (validationState.isValid === true) {
-            return { class: 'valid', disabled: true };
-        }
-        if (validationState.isValid === false) {
-            return { class: 'invalid', disabled: false };
-        }
-        return { class: '', disabled: false };
     };
 
     const handleInput = (value: string) => {
@@ -95,30 +92,54 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <div className="container">
-            <IonCard>
-                <IonCardHeader>
-                    <IonCardTitle>Inicia Sesión</IonCardTitle>
-                </IonCardHeader>
+        <IonPage>
+            <IonContent className="ion-padding">
+                <IonGrid style={{ height: '100%' }}>
+                    <IonRow className="ion-align-items-center ion-justify-content-center" style={{ height: '100%' }}>
+                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
+                            <IonCard>
+                                <IonCardHeader>
+                                    <IonCardTitle className="ion-text-center">Inicia Sesión</IonCardTitle>
+                                </IonCardHeader>
 
-                <IonItem>
-                    <IonInputOtp
-                        length={5}
-                        type="number"
-                        size="small"
-                        value={otpValue}
-                        onIonInput={(e) => handleInput(e.detail.value!)}
-                        className={`ion-touched ${getValidationState().class}`}
-                        disabled={getValidationState().disabled}
-                    >
-                        Por favor, ingresa la llave de acceso al sistema.
-                        {validationState.error && <p className="error">{validationState.error}</p>}
-                    </IonInputOtp>
-                </IonItem>
-            </IonCard>
+                                <div className="ion-padding">
+                                    <IonText color="medium">
+                                        <p className="ion-text-center">Por favor, ingresa la llave de acceso al sistema.</p>
+                                    </IonText>
+                                    
+                                    <IonItem lines="none" className="ion-margin-vertical">
+                                        <IonInputOtp
+                                            length={5}
+                                            type="number"
+                                            value={otpValue}
+                                            onIonInput={(e) => handleInput(e.detail.value!)}
+                                            disabled={validationState.isLoading}
+                                            style={{ margin: 'auto' }}
+                                        />
+                                    </IonItem>
+                                    
+                                    {validationState.error && (
+                                        <IonText color="danger" className="ion-text-center">
+                                            <p>{validationState.error}</p>
+                                        </IonText>
+                                    )}
 
-            {/*  <DebugConsole logs={debugLogs} /> */}
-        </div>
+                                    <div className="ion-margin-top">
+                                        <IonButton
+                                            expand="block"
+                                            onClick={() => validateOtp(otpValue)}
+                                            disabled={otpValue.length !== 5 || validationState.isLoading}
+                                        >
+                                            {validationState.isLoading ? <IonSpinner name="crescent" /> : "Ingresar"}
+                                        </IonButton>
+                                    </div>
+                                </div>
+                            </IonCard>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
+        </IonPage>
     );
 };
 

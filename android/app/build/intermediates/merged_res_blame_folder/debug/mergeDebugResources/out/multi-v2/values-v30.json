@@ -1,8 +1,18 @@
 {
     "logs": [
         {
-            "outputFile": "io.ionic.starter.app-mergeDebugResources-26:/values-v30/values-v30.xml",
+            "outputFile": "io.ionic.starter.app-mergeDebugResources-58:/values-v30/values-v30.xml",
             "map": [
+                {
+                    "source": "C:\\Users\\Jose\\.gradle\\caches\\8.14.3\\transforms\\be4f1837b084f7067a5196eae4351c64\\transformed\\material3\\res\\values-v30\\values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                },
                 {
                     "source": "C:\\Users\\Jose\\.gradle\\caches\\8.14.3\\transforms\\4f5eb2e1ae45a07736e2f6ed862ea36a\\transformed\\core-splashscreen-1.2.0\\res\\values-v30\\values-v30.xml",
                     "from": {
@@ -12,6 +22,14 @@
                         "endLines": "7",
                         "endColumns": "12",
                         "endOffsets": "433"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "128",
+                        "endLines": "8",
+                        "endColumns": "12",
+                        "endOffsets": "506"
                     }
                 }
             ]
