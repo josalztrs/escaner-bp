@@ -9,6 +9,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -20,10 +21,11 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { scanOutline } from 'ionicons/icons';
+import { scanOutline, searchOutline } from 'ionicons/icons';
 import { Capacitor } from '@capacitor/core';
 import { addRecord, ScanRecord } from '../services/scanHistoryStore';
-import { ApiError, EquipoResponse, escanearYBuscarEquipo } from '../services/Escaner';
+import { ApiError, EquipoResponse, buscarEquipoPorSN, escanearYBuscarEquipo } from '../services/Escaner';
+import EquipoResultCard from '../components/EquipoResultCard';
 
 const DEPARTAMENTOS = ['Almacén', 'Oficina A', 'Sistemas'] as const;
 
@@ -37,6 +39,7 @@ const ScanTab: React.FC = () => {
   const [scannedSN, setScannedSN] = useState<string | null>(null);
   const [equipoData, setEquipoData] = useState<EquipoResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [manualSN, setManualSN] = useState('');
 
   const searchbarRef = useRef<HTMLIonSearchbarElement | null>(null);
 
@@ -91,6 +94,44 @@ const ScanTab: React.FC = () => {
     } finally {
       setIsScanning(false);
     }
+  };
+
+  const handleManualSearch = async () => {
+    const sn = manualSN.trim();
+    if (!sn || !isValidLocation || isScanning) return;
+    setIsScanning(true);
+    setErrorMsg(null);
+    setEquipoData(null);
+    setScannedSN(null);
+
+    try {
+      const equipo = await buscarEquipoPorSN(sn);
+      setScannedSN(sn);
+      setEquipoData(equipo);
+
+      const saved = await addRecord({
+        location: location.trim(),
+        value: sn,
+        createdAt: new Date().toISOString(),
+      });
+      setLastSaved(saved);
+      setManualSN('');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
+        return;
+      }
+      const message = error instanceof Error ? error.message : 'Error desconocido';
+      setErrorMsg(message);
+    } finally {
+      setIsScanning(false);
+    }
+  };
+
+  const handleClear = () => {
+    setEquipoData(null);
+    setScannedSN(null);
+    setErrorMsg(null);
   };
 
   return (
@@ -169,6 +210,44 @@ const ScanTab: React.FC = () => {
           )}
         </IonButton>
 
+        {/* Búsqueda manual por S/N */}
+        <IonCard style={{ marginInline: 0 }} className="ion-margin-top">
+          <IonCardHeader>
+            <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem>
+              <IonInput
+                value={manualSN}
+                placeholder="Escribe el serial del equipo"
+                onIonInput={(e) => setManualSN(e.detail.value ?? '')}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') void handleManualSearch();
+                }}
+                clearInput
+              />
+            </IonItem>
+            <IonButton
+              expand="block"
+              className="ion-margin-top"
+              onClick={() => void handleManualSearch()}
+              disabled={!isValidLocation || isScanning || !manualSN.trim()}
+            >
+              {isScanning ? (
+                <>
+                  <IonSpinner name="crescent" className="ion-margin-end" />
+                  Buscando...
+                </>
+              ) : (
+                <>
+                  <IonIcon icon={searchOutline} slot="start" />
+                  Buscar por serial
+                </>
+              )}
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+
         {lastSaved && (
           <IonCard className="ion-margin-top" style={{ marginInline: 0 }}>
             <IonCardHeader>
@@ -192,18 +271,13 @@ const ScanTab: React.FC = () => {
           </IonCard>
         )}
 
+        {/* Resultado del equipo escaneado */}
         {equipoData && scannedSN && (
-          <IonCard className="ion-margin-top" style={{ marginInline: 0 }}>
-            <IonCardHeader>
-              <IonCardSubtitle>Datos del equipo</IonCardSubtitle>
-              <IonCardTitle>S/N: {scannedSN}</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontSize: '14px', margin: 0 }}>
-                {JSON.stringify(equipoData, null, 2)}
-              </pre>
-            </IonCardContent>
-          </IonCard>
+          <EquipoResultCard
+            resultado={equipoData}
+            serialNumber={scannedSN}
+            onClear={handleClear}
+          />
         )}
 
         {errorMsg && (
@@ -222,4 +296,5 @@ const ScanTab: React.FC = () => {
 };
 
 export default ScanTab;
+
 
