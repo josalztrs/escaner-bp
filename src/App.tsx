@@ -2,14 +2,18 @@ import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
   IonTabs,
+  IonIcon,
+  IonLabel,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Inicio from './pages/Inicio';
-import Escaner from './pages/Escaner';
+import { scanOutline, timeOutline } from 'ionicons/icons';
 import LoginPage from './pages/Login';
-import tabBar from './components/TabBar';
+import ScanTab from './pages/ScanTab.tsx';
+import HistoryTab from './pages/HistoryTab.tsx';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,25 +50,50 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/login">
-            <LoginPage />
-          </Route>
-          <Route exact path="/tab1">
-            <Inicio />
-          </Route>
-          <Route exact path="/tab2">
-            <Escaner />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
+      <IonRouterOutlet>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
 
-        {/* tabBar es una constante JSX, no un componente, por eso Ionic lo reconoce */}
-        {tabBar}
-      </IonTabs>
+        <Route path="/tabs">
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/tabs/scan">
+                <ScanTab />
+              </Route>
+              <Route exact path="/tabs/history">
+                <HistoryTab />
+              </Route>
+              <Route exact path="/tabs">
+                <Redirect to="/tabs/scan" />
+              </Route>
+            </IonRouterOutlet>
+
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="scan" href="/tabs/scan">
+                <IonIcon icon={scanOutline} />
+                <IonLabel>Escaneo</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="history" href="/tabs/history">
+                <IonIcon icon={timeOutline} />
+                <IonLabel>Historial</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </Route>
+
+        {/* Compat: rutas antiguas */}
+        <Route exact path="/tab1">
+          <Redirect to="/tabs/scan" />
+        </Route>
+        <Route exact path="/tab2">
+          <Redirect to="/tabs/scan" />
+        </Route>
+
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+      </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
 );
