@@ -116,7 +116,7 @@ const ScanTab: React.FC = () => {
         setErrorMsg('El escáner no está disponible en el navegador. Ejecuta en Android/iOS (Capacitor).');
         return;
       }
-      const result = await escanearYBuscarEquipo();
+      const result = await escanearYBuscarEquipo(location.trim());
       if (!result) return; // cancelado
 
       setScannedSN(result.serialNumber);
@@ -149,7 +149,7 @@ const ScanTab: React.FC = () => {
     setScannedSN(null);
 
     try {
-      const equipo = await buscarEquipoPorSN(sn);
+      const equipo = await buscarEquipoPorSN(sn, location.trim());
       setScannedSN(sn);
       setEquipoData(equipo);
 

@@ -70,8 +70,14 @@ const normalizeSerialNumber = (raw: string): string => {
     return initial.replace(/^(s\/n|sn|serial|serial\s*number)\s*[:=]\s*/i, '').trim();
 };
 
-const buildEquipoUrl = (serialNumber: string): string =>
-    `${API_BASE_URL}/${encodeURIComponent(serialNumber)}`;
+const buildEquipoUrl = (serialNumber: string, deptoscan?: string): string => {
+    const base = `${API_BASE_URL}/${encodeURIComponent(serialNumber)}`;
+    if (!deptoscan) return base;
+
+    const u = new URL(base);
+    u.searchParams.set('deptoscan', deptoscan);
+    return u.toString();
+};
 
 /**
  * Obtiene el token JWT almacenado en Preferences.
@@ -170,9 +176,9 @@ export const iniciarEscaneoDetallado = async (): Promise<ScanResult> => {
  * @returns Los datos del equipo desde la API.
  * @throws Error si la petición falla o el equipo no es encontrado.
  */
-export const buscarEquipoPorSN = async (serialNumber: string): Promise<EquipoResponse> => {
+export const buscarEquipoPorSN = async (serialNumber: string, deptoscan?: string): Promise<EquipoResponse> => {
     const normalizedSN = normalizeSerialNumber(serialNumber);
-    const url = buildEquipoUrl(normalizedSN);
+    const url = buildEquipoUrl(normalizedSN, deptoscan?.trim());
 
     try {
         const token = await getAuthToken();
@@ -282,12 +288,12 @@ export const obtenerDeptos = async (): Promise<UbicacionRow[]> => {
  *
  * @returns El resultado con el serial number y los datos del equipo, o null si se canceló el escaneo.
  */
-export const escanearYBuscarEquipo = async (): Promise<ScanEquipoResult | null> => {
+export const escanearYBuscarEquipo = async (deptoscan?: string): Promise<ScanEquipoResult | null> => {
     const scan = await iniciarEscaneoDetallado();
     if (scan.state !== 'ok') return null;
 
     return {
         serialNumber: scan.serialNumber,
-        equipo: await buscarEquipoPorSN(scan.serialNumber),
+        equipo: await buscarEquipoPorSN(scan.serialNumber, deptoscan),
     };
 };
