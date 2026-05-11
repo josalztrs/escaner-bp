@@ -228,6 +228,55 @@ export const buscarEquipoPorSN = async (serialNumber: string): Promise<EquipoRes
     }
 };
 
+export type UbicacionRow = Record<string, unknown>;
+
+export const obtenerDeptos = async (): Promise<UbicacionRow[]> => {
+    const url = `${API_BASE_URL}/deptos`;
+
+    try {
+        const token = await getAuthToken();
+        const headers: Record<string, string> = {
+            Accept: 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await CapacitorHttp.request({
+            method: 'GET',
+            url,
+            headers,
+        });
+
+        const data = parseMaybeJson(response.data);
+
+        if (response.status >= 200 && response.status < 300) {
+            return Array.isArray(data) ? (data as UbicacionRow[]) : [];
+        }
+
+        if (response.status === 401 || response.status === 403) {
+            throw new ApiError({
+                status: response.status,
+                message: 'No autorizado. Inicia sesión nuevamente.',
+                url,
+                serialNumber: '',
+                responseBody: data,
+            });
+        }
+
+        throw new ApiError({
+            status: response.status,
+            message: `Error del servidor: ${response.status}`,
+            url,
+            serialNumber: '',
+            responseBody: data,
+        });
+    } catch (error) {
+        console.error('Error al obtener deptos:', error);
+        throw error;
+    }
+};
+
 /**
  * Flujo completo: escanear un código y luego buscar el equipo en la API.
  *

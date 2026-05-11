@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   IonButton,
   IonCard,
@@ -24,10 +24,8 @@ import {
 import { scanOutline, searchOutline } from 'ionicons/icons';
 import { Capacitor } from '@capacitor/core';
 import { addRecord, ScanRecord } from '../services/scanHistoryStore';
-import { ApiError, EquipoResponse, buscarEquipoPorSN, escanearYBuscarEquipo } from '../services/Escaner';
+import { ApiError, EquipoResponse, buscarEquipoPorSN, escanearYBuscarEquipo, obtenerDeptos } from '../services/Escaner';
 import EquipoResultCard from '../components/EquipoResultCard';
-
-const DEPARTAMENTOS = ['Almacén', 'Oficina A', 'Sistemas'] as const;
 
 const normalize = (s: string) => s.trim().toLocaleLowerCase();
 
@@ -35,6 +33,9 @@ const ScanTab: React.FC = () => {
   const [location, setLocation] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
+  const [isLoadingDeptos, setIsLoadingDeptos] = useState(false);
+  const [deptos, setDeptos] = useState<string[]>([]);
+  const [deptosError, setDeptosError] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<ScanRecord | null>(null);
   const [scannedSN, setScannedSN] = useState<string | null>(null);
   const [equipoData, setEquipoData] = useState<EquipoResponse | null>(null);
@@ -43,16 +44,59 @@ const ScanTab: React.FC = () => {
 
   const searchbarRef = useRef<HTMLIonSearchbarElement | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const toLabel = (row: Record<string, unknown>): string => {
+      const candidate =
+        (typeof row.UNIDAD === 'string' && row.UNIDAD) ||
+        (typeof row.Unidad === 'string' && row.Unidad) ||
+        (typeof row.unidad === 'string' && row.unidad) ||
+        (typeof row.DEPTO === 'string' && row.DEPTO) ||
+        (typeof row.depto === 'string' && row.depto) ||
+        '';
+      return candidate.trim();
+    };
+
+    const load = async () => {
+      setIsLoadingDeptos(true);
+      setDeptosError(null);
+      try {
+        const rows = await obtenerDeptos();
+        if (cancelled) return;
+
+        const labels = rows
+          .map((r) => toLabel(r))
+          .filter((s) => s.length > 0);
+
+        const uniqueSorted = Array.from(new Set(labels)).sort((a, b) => a.localeCompare(b, 'es'));
+        setDeptos(uniqueSorted);
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : 'No se pudieron cargar los departamentos';
+        setDeptos([]);
+        setDeptosError(msg);
+      } finally {
+        if (!cancelled) setIsLoadingDeptos(false);
+      }
+    };
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const isValidLocation = useMemo(() => {
     const n = normalize(location);
-    return DEPARTAMENTOS.some((d) => normalize(d) === n);
-  }, [location]);
+    return deptos.some((d) => normalize(d) === n);
+  }, [location, deptos]);
 
   const suggestions = useMemo(() => {
     const q = normalize(location);
     if (!q) return [];
-    return DEPARTAMENTOS.filter((d) => normalize(d).includes(q));
-  }, [location]);
+    return deptos.filter((d) => normalize(d).includes(q));
+  }, [location, deptos]);
 
   const pickLocation = async (value: string) => {
     setLocation(value);
@@ -154,7 +198,7 @@ const ScanTab: React.FC = () => {
                 searchbarRef.current = el;
               }}
               value={location}
-              placeholder="Ej: Almacén, Oficina A, Sistemas"
+              placeholder={isLoadingDeptos ? 'Cargando departamentos...' : 'Busca y selecciona un departamento'}
               onIonInput={(e) => {
                 setLocation(e.detail.value ?? '');
                 setShowSuggestions(true);
@@ -168,6 +212,19 @@ const ScanTab: React.FC = () => {
               inputmode="search"
               showClearButton="focus"
             />
+
+            {deptosError && (
+              <IonNote color="danger">
+                No se pudieron cargar los departamentos desde la API. {deptosError}
+              </IonNote>
+            )}
+
+            {isLoadingDeptos && (
+              <IonNote>
+                <IonSpinner name="crescent" className="ion-margin-end" />
+                Cargando departamentos...
+              </IonNote>
+            )}
 
             {!isValidLocation && location.trim().length > 0 && (
               <IonNote color="danger">Ubicación no válida. Debe coincidir con la lista.</IonNote>
