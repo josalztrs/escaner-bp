@@ -119,6 +119,8 @@ export class ApiError extends Error {
  */
 export interface ScanEquipoResult {
     serialNumber: string;
+    /** Valor crudo del código escaneado (QR/barcode) */
+    raw?: string;
     equipo: EquipoResponse;
 }
 
@@ -294,6 +296,7 @@ export const escanearYBuscarEquipo = async (deptoscan?: string): Promise<ScanEqu
 
     return {
         serialNumber: scan.serialNumber,
+        raw: scan.raw,
         equipo: await buscarEquipoPorSN(scan.serialNumber, deptoscan),
     };
 };

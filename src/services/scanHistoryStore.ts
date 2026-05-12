@@ -1,11 +1,41 @@
 import { Preferences } from '@capacitor/preferences';
 
+export type ScanStatus = 'found' | 'not-found' | 'no-assignment';
+
 export interface ScanRecord {
   id: string;
   location: string;
   value: string;
   raw?: string;
   createdAt: string; // ISO
+  /** Estado del resultado del escaneo */
+  status?: ScanStatus;
+  /** Nombre del responsable (TRAB_NOM) */
+  equipoName?: string;
+  /** Marca del equipo */
+  marca?: string;
+  /** Modelo del equipo */
+  modelo?: string;
+  /** Categoría del bien */
+  categoria?: string;
+  /** Departamento del responsable */
+  depto?: string;
+  /** Estado del equipo (ESTADO) */
+  estado?: string;
+  /** Cargo del responsable (TRAB_CARGO) */
+  cargo?: string;
+  /** División (TRAB_DIV) */
+  division?: string;
+  /** Descripción del bien (DESCRIPCION) */
+  descripcion?: string;
+  /** Clase / grupo del bien (CLASE_BIEN) */
+  claseBien?: string;
+  /** Fecha de asignación (F_ASIG) */
+  propietario?: string;
+  /** Código HTTP cuando falló la petición (p. ej. 404) */
+  httpStatus?: number;
+  /** Mensaje de error para not-found / no-assignment */
+  message?: string;
 }
 
 const KEY = 'scan_history_v1';

@@ -23,11 +23,114 @@ import {
 } from '@ionic/react';
 import { scanOutline, searchOutline } from 'ionicons/icons';
 import { Capacitor } from '@capacitor/core';
-import { addRecord, ScanRecord } from '../services/scanHistoryStore';
-import { ApiError, EquipoResponse, buscarEquipoPorSN, escanearYBuscarEquipo, obtenerDeptos } from '../services/Escaner';
+import { addRecord, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
+import {
+  ApiError,
+  type ApiErrorInfo,
+  EquipoResponse,
+  buscarEquipoPorSN,
+  escanearYBuscarEquipo,
+  obtenerDeptos,
+} from '../services/Escaner';
 import EquipoResultCard from '../components/EquipoResultCard';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 const normalize = (s: string) => s.trim().toLocaleLowerCase();
+
+/* ── Helpers para extraer metadata del equipo ── */
+
+const resolveFlat = (raw: EquipoResponse): Record<string, unknown> => {
+  let obj: unknown = raw;
+  if (Array.isArray(obj)) obj = obj[0] ?? {};
+  if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+    const record = obj as Record<string, unknown>;
+    for (const wk of ['data', 'equipo', 'result', 'record', 'item']) {
+      const inner = record[wk];
+      if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+        return inner as Record<string, unknown>;
+      }
+      if (Array.isArray(inner) && inner.length > 0) {
+        return (inner[0] ?? {}) as Record<string, unknown>;
+      }
+    }
+    return record;
+  }
+  return {};
+};
+
+const str = (data: Record<string, unknown>, key: string): string | undefined => {
+  const val = data[key];
+  return val == null || val === '' ? undefined : String(val);
+};
+
+const extractApiErrorMessage = (info: ApiErrorInfo): string => {
+  const b = info.responseBody;
+  if (b && typeof b === 'object' && !Array.isArray(b)) {
+    const o = b as Record<string, unknown>;
+    if (typeof o.error === 'string' && o.error.trim()) return o.error.trim();
+    if (typeof o.message === 'string' && o.message.trim()) return o.message.trim();
+  }
+  return info.message;
+};
+
+/** Determina el status y extrae campos relevantes de la respuesta del equipo */
+const buildRecordMeta = (
+  equipo: EquipoResponse,
+  sn: string,
+  loc: string,
+  opts?: { raw?: string },
+): Omit<ScanRecord, 'id'> => {
+  const flat = resolveFlat(equipo);
+  const isError = flat['error'] === true || flat['error'] === 'true';
+  const rawMsg = String(flat['message'] ?? flat['msg'] ?? '');
+  const msg = rawMsg.toLowerCase();
+
+  let status: ScanStatus = 'found';
+  let message: string | undefined;
+
+  if (isError) {
+    if (
+      msg.includes('sin asignación') ||
+      msg.includes('sin asignacion') ||
+      msg.includes('sin asignaci')
+    ) {
+      status = 'no-assignment';
+      message = rawMsg || 'Equipo tecnológico sin asignación vigente.';
+    } else if (
+      msg.includes('no está registrado') ||
+      msg.includes('no esta registrado') ||
+      msg.includes('no registrado') ||
+      msg.includes('no encontrado') ||
+      msg.includes('inventario')
+    ) {
+      status = 'not-found';
+      message = rawMsg || 'El bien no está registrado o no fue encontrado.';
+    } else {
+      status = 'not-found';
+      message = rawMsg || 'No se pudo obtener información del bien.';
+    }
+  }
+
+  return {
+    location: loc,
+    value: sn,
+    raw: opts?.raw,
+    createdAt: new Date().toISOString(),
+    status,
+    equipoName: str(flat, 'TRAB_NOM'),
+    marca: str(flat, 'MARCA'),
+    modelo: str(flat, 'MODELO'),
+    categoria: str(flat, 'CATEG_BIEN'),
+    depto: str(flat, 'DEPTO'),
+    estado: str(flat, 'ESTADO'),
+    cargo: str(flat, 'TRAB_CARGO'),
+    division: str(flat, 'TRAB_DIV'),
+    descripcion: str(flat, 'DESCRIPCION'),
+    claseBien: str(flat, 'CLASE_BIEN'),
+    propietario: str(flat, 'PROPIETARIO'),
+    message,
+  };
+};
 
 const ScanTab: React.FC = () => {
   const [location, setLocation] = useState('');
@@ -37,6 +140,7 @@ const ScanTab: React.FC = () => {
   const [deptos, setDeptos] = useState<string[]>([]);
   const [deptosError, setDeptosError] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<ScanRecord | null>(null);
+  const [lastSavedVisible, setLastSavedVisible] = useState(true);
   const [scannedSN, setScannedSN] = useState<string | null>(null);
   const [equipoData, setEquipoData] = useState<EquipoResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -107,6 +211,7 @@ const ScanTab: React.FC = () => {
   const handleScan = async () => {
     if (!isValidLocation || isScanning) return;
     setIsScanning(true);
+    setLastSavedVisible(false); // fade-out de la card anterior
     setErrorMsg(null);
     setEquipoData(null);
     setScannedSN(null);
@@ -117,25 +222,41 @@ const ScanTab: React.FC = () => {
         return;
       }
       const result = await escanearYBuscarEquipo(location.trim());
-      if (!result) return; // cancelado
+      if (!result){
+        Haptics.impact({style: ImpactStyle.Light})
+        return;
+      } // cancelado
 
       setScannedSN(result.serialNumber);
       setEquipoData(result.equipo);
 
-      const saved = await addRecord({
-        location: location.trim(),
-        value: result.serialNumber,
-        createdAt: new Date().toISOString(),
-      });
+      const meta = buildRecordMeta(result.equipo, result.serialNumber, location.trim(), { raw: result.raw });
+      const saved = await addRecord(meta);
       setLastSaved(saved);
+      setLastSavedVisible(true);
     } catch (error) {
       if (error instanceof ApiError) {
+        if (error.info.status === 404) {
+          const saved = await addRecord({
+            location: location.trim(),
+            value: error.info.serialNumber,
+            createdAt: new Date().toISOString(),
+            status: 'not-found',
+            message: extractApiErrorMessage(error.info),
+            httpStatus: 404,
+          });
+          setLastSaved(saved);
+          setLastSavedVisible(true);
+        }
+        Haptics.notification({type: NotificationType.Error});
         setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
         return;
       }
+      Haptics.notification({type: NotificationType.Error});
       const message = error instanceof Error ? error.message : 'Error desconocido al escanear';
       setErrorMsg(message);
     } finally {
+      Haptics.notification({type: NotificationType.Success});
       setIsScanning(false);
     }
   };
@@ -144,6 +265,7 @@ const ScanTab: React.FC = () => {
     const sn = manualSN.trim();
     if (!sn || !isValidLocation || isScanning) return;
     setIsScanning(true);
+    setLastSavedVisible(false); // fade-out de la card anterior
     setErrorMsg(null);
     setEquipoData(null);
     setScannedSN(null);
@@ -153,15 +275,25 @@ const ScanTab: React.FC = () => {
       setScannedSN(sn);
       setEquipoData(equipo);
 
-      const saved = await addRecord({
-        location: location.trim(),
-        value: sn,
-        createdAt: new Date().toISOString(),
-      });
+      const meta = buildRecordMeta(equipo, sn, location.trim());
+      const saved = await addRecord(meta);
       setLastSaved(saved);
+      setLastSavedVisible(true);
       setManualSN('');
     } catch (error) {
       if (error instanceof ApiError) {
+        if (error.info.status === 404) {
+          const saved = await addRecord({
+            location: location.trim(),
+            value: error.info.serialNumber || sn,
+            createdAt: new Date().toISOString(),
+            status: 'not-found',
+            message: extractApiErrorMessage(error.info),
+            httpStatus: 404,
+          });
+          setLastSaved(saved);
+          setLastSavedVisible(true);
+        }
         setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
         return;
       }
@@ -306,7 +438,16 @@ const ScanTab: React.FC = () => {
         </IonCard>
 
         {lastSaved && (
-          <IonCard className="ion-margin-top" style={{ marginInline: 0 }}>
+          <IonCard
+            className="ion-margin-top"
+            style={{
+              marginInline: 0,
+              transition: 'opacity 0.5s ease, transform 0.5s ease',
+              opacity: lastSavedVisible ? 1 : 0,
+              transform: lastSavedVisible ? 'translateY(0)' : 'translateY(-12px)',
+              pointerEvents: lastSavedVisible ? 'auto' : 'none',
+            }}
+          >
             <IonCardHeader>
               <IonCardSubtitle>Último registro guardado</IonCardSubtitle>
               <IonCardTitle>{lastSaved.value}</IonCardTitle>
@@ -314,10 +455,44 @@ const ScanTab: React.FC = () => {
             <IonCardContent>
               <IonItem lines="none">
                 <IonLabel className="ion-text-wrap">
-                  <h3>Ubicación</h3>
+                  <h3>Dpto. escaneo</h3>
                   <p>{lastSaved.location}</p>
                 </IonLabel>
               </IonItem>
+              {lastSaved.depto && (
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Dpto. asignación</h3>
+                    <p>{lastSaved.depto}</p>
+                  </IonLabel>
+                </IonItem>
+              )}
+              {lastSaved.equipoName && (
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Responsable</h3>
+                    <p>{lastSaved.equipoName}</p>
+                  </IonLabel>
+                </IonItem>
+              )}
+              {(lastSaved.marca || lastSaved.modelo) && (
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Marca / modelo</h3>
+                    <p>
+                      {[lastSaved.marca, lastSaved.modelo].filter(Boolean).join(' · ')}
+                    </p>
+                  </IonLabel>
+                </IonItem>
+              )}
+              {lastSaved.message && (
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Nota</h3>
+                    <p>{lastSaved.message}</p>
+                  </IonLabel>
+                </IonItem>
+              )}
               <IonItem lines="none">
                 <IonLabel className="ion-text-wrap">
                   <h3>Fecha</h3>
@@ -330,11 +505,17 @@ const ScanTab: React.FC = () => {
 
         {/* Resultado del equipo escaneado */}
         {equipoData && scannedSN && (
-          <EquipoResultCard
-            resultado={equipoData}
-            serialNumber={scannedSN}
-            onClear={handleClear}
-          />
+          <div
+            style={{
+              animation: 'fadeInUp 0.45s ease both',
+            }}
+          >
+            <EquipoResultCard
+              resultado={equipoData}
+              serialNumber={scannedSN}
+              onClear={handleClear}
+            />
+          </div>
         )}
 
         {errorMsg && (

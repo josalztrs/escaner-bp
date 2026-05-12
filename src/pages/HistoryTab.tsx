@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
+  IonBadge,
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -11,7 +13,40 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { clearRecords, listRecords, ScanRecord } from '../services/scanHistoryStore';
+import {
+  checkmarkCircleOutline,
+  banOutline,
+  warningOutline,
+  helpCircleOutline,
+} from 'ionicons/icons';
+import { clearRecords, listRecords, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
+
+/* ── Status helpers ── */
+
+const statusConfig: Record<
+  ScanStatus,
+  { label: string; color: string; icon: string }
+> = {
+  found: { label: 'Encontrado', color: 'success', icon: checkmarkCircleOutline },
+  'not-found': { label: 'No registrado', color: 'danger', icon: banOutline },
+  'no-assignment': { label: 'Sin asignación', color: 'warning', icon: warningOutline },
+};
+
+const getStatusInfo = (status?: ScanStatus) => {
+  if (!status) return { label: 'Desconocido', color: 'medium', icon: helpCircleOutline };
+  return statusConfig[status] ?? { label: status, color: 'medium', icon: helpCircleOutline };
+};
+
+const DetailLine = ({ label, value }: { label: string; value?: string }) => {
+  if (!value || value.trim() === '') return null;
+  return (
+    <p style={{ margin: '2px 0' }}>
+      <strong>{label}:</strong> {value}
+    </p>
+  );
+};
+
+/* ── Component ── */
 
 const HistoryTab: React.FC = () => {
   const [records, setRecords] = useState<ScanRecord[]>([]);
@@ -76,19 +111,98 @@ const HistoryTab: React.FC = () => {
           <IonNote color="medium">Aún no hay registros. Vuelve al tab de Escaneo para crear uno.</IonNote>
         ) : (
           <IonList inset>
-            {records.map((r) => (
-              <IonItem key={r.id}>
-                <IonLabel className="ion-text-wrap">
-                  <h2>{r.value}</h2>
-                  <p>
-                    <strong>Ubicación:</strong> {r.location}
-                  </p>
-                  <p>
-                    <strong>Fecha:</strong> {new Date(r.createdAt).toLocaleString()}
-                  </p>
-                </IonLabel>
-              </IonItem>
-            ))}
+            {records.map((r) => {
+              const info = getStatusInfo(r.status);
+
+              return (
+                <IonItem
+                  key={r.id}
+                  style={{
+                    '--border-color': `var(--ion-color-${info.color})`,
+                    borderLeft: `4px solid var(--ion-color-${info.color})`,
+                  } as React.CSSProperties}
+                >
+                  <IonIcon
+                    icon={info.icon}
+                    color={info.color}
+                    slot="start"
+                    style={{ fontSize: '1.5rem' }}
+                  />
+                  <IonLabel className="ion-text-wrap">
+                    {/* Serial + badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                      <h2 style={{ margin: 0, fontWeight: 600 }}>{r.value}</h2>
+                      <IonBadge
+                        color={info.color}
+                        style={{ fontSize: '0.65rem', padding: '2px 7px' }}
+                      >
+                        {info.label}
+                      </IonBadge>
+                    </div>
+
+                    <div style={{ marginTop: 6 }}>
+                      <DetailLine label="Dpto. escaneo" value={r.location} />
+                      <DetailLine label="Dpto. asignación" value={r.depto} />
+                    </div>
+
+                    {r.equipoName && (
+                      <p style={{ marginTop: 6 }}>
+                        <strong>Responsable:</strong>{' '}
+                        <span style={{ textTransform: 'capitalize' }}>{r.equipoName.toLowerCase()}</span>
+                      </p>
+                    )}
+                    <DetailLine label="Cargo" value={r.cargo} />
+                    <DetailLine label="División" value={r.division} />
+
+                    {(r.categoria || r.marca || r.modelo || r.descripcion || r.claseBien || r.propietario) && (
+                      <div style={{ marginTop: 8, paddingTop: 6, borderTop: '1px solid var(--ion-color-step-150, rgba(0,0,0,0.08))' }}>
+                        <p style={{ margin: '0 0 4px', fontSize: '0.8rem', color: 'var(--ion-color-medium)' }}>
+                          Activo
+                        </p>
+                        <DetailLine label="Categoría" value={r.categoria} />
+                        <DetailLine label="Clase" value={r.claseBien} />
+                        <DetailLine label="Marca" value={r.marca} />
+                        <DetailLine label="Modelo" value={r.modelo} />
+                      </div>
+                    )}
+
+                    {r.estado && r.status === 'found' && (
+                      <p style={{ marginTop: 6 }}>
+                        <strong>Estado del bien:</strong> {r.estado}
+                      </p>
+                    )}
+
+                    {r.raw && (
+                      <p style={{ marginTop: 6, fontSize: '0.85rem', color: 'var(--ion-color-medium)' }}>
+                        <strong>Código leído:</strong> <span style={{ wordBreak: 'break-all' }}>{r.raw}</span>
+                      </p>
+                    )}
+
+                    {r.httpStatus != null && (
+                      <p style={{ marginTop: 4, fontSize: '0.85rem' }}>
+                        <strong>HTTP:</strong> {r.httpStatus}
+                      </p>
+                    )}
+
+                    {r.message && (
+                      <p
+                        style={{
+                          marginTop: 8,
+                          color: `var(--ion-color-${info.color}-shade, var(--ion-color-${info.color}))`,
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        {r.message}
+                      </p>
+                    )}
+
+                    <p style={{ marginTop: 8, color: 'var(--ion-color-medium)', fontSize: '0.85rem' }}>
+                      {new Date(r.createdAt).toLocaleString()}
+                    </p>
+                  </IonLabel>
+                </IonItem>
+              );
+            })}
           </IonList>
         )}
       </IonContent>
@@ -97,4 +211,3 @@ const HistoryTab: React.FC = () => {
 };
 
 export default HistoryTab;
-
