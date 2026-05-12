@@ -18,7 +18,9 @@ import {
   banOutline,
   warningOutline,
   helpCircleOutline,
+  shareOutline,
 } from 'ionicons/icons';
+import { Share } from '@capacitor/share';
 import { clearRecords, listRecords, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
 
 /* ── Status helpers ── */
@@ -56,6 +58,24 @@ const HistoryTab: React.FC = () => {
     const data = await listRecords();
     setRecords(data);
   }, []);
+
+  const handleShare = async (record: ScanRecord) => {
+    const info = getStatusInfo(record.status);
+    let text = `Reporte de Bien - SN: ${record.value}\n`;
+    text += `Estado: ${info.label}\n`;
+    text += `Dpto. Escaneo: ${record.location}\n`;
+    if (record.depto) text += `Dpto. Asignación: ${record.depto}\n`;
+    if (record.equipoName) text += `Responsable: ${record.equipoName}\n`;
+    if (record.marca) text += `Marca: ${record.marca}\n`;
+    if (record.modelo) text += `Modelo: ${record.modelo}\n`;
+    if (record.createdAt) text += `Fecha: ${new Date(record.createdAt).toLocaleString()}\n`;
+
+    await Share.share({
+      title: 'Compartir Registro de Escaneo',
+      text: text,
+      dialogTitle: 'Enviar reporte',
+    });
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -128,6 +148,18 @@ const HistoryTab: React.FC = () => {
                     slot="start"
                     style={{ fontSize: '1.5rem' }}
                   />
+                  <IonButton
+                    fill="clear"
+                    slot="end"
+                    color="primary"
+                    size="large"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      void handleShare(r);
+                    }}
+                  >
+                    <IonIcon icon={shareOutline} slot="icon-only" style={{ fontSize: '1.8rem' }} />
+                  </IonButton>
                   <IonLabel className="ion-text-wrap">
                     {/* Serial + badge */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
