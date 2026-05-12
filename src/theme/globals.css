@@ -1,28 +1,28 @@
 /* ── Tokens de Diseño ── */
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-bg: #ffffff;
+  --glass-border: #e0e0e0;
   --premium-gradient: linear-gradient(135deg, #3880ff 0%, #6370ff 100%);
-  --premium-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --premium-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* Ajustes para iOS */
 .ios {
-  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg: #ffffff;
 }
 
 /* ── MODO OSCURO ── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --glass-bg: rgba(30, 30, 30, 0.85) !important;
-    --glass-border: rgba(255, 255, 255, 0.12) !important;
+    --glass-bg: #1e1e1e !important;
+    --glass-border: #333333 !important;
   }
 }
 
 /* Soporte para clase .dark manual o de Ionic */
 body.dark, body.ion-palette-dark, .dark {
-  --glass-bg: rgba(30, 30, 30, 0.85) !important;
-  --glass-border: rgba(255, 255, 255, 0.12) !important;
+  --glass-bg: #1e1e1e !important;
+  --glass-border: #333333 !important;
 }
 
 /* ── Contenedor Responsivo ── */
@@ -35,10 +35,8 @@ body.dark, body.ion-palette-dark, .dark {
 /* ── Estilos Premium ── */
 .glass-card {
   background: var(--glass-bg) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
   border: 1px solid var(--glass-border) !important;
-  border-radius: 24px !important;
+  border-radius: 20px !important;
   box-shadow: var(--premium-shadow) !important;
   margin-inline: 0 !important;
   overflow: hidden;
@@ -53,12 +51,12 @@ body.dark, body.ion-palette-dark, .dark {
 }
 
 .glass-card ion-searchbar {
-  --background: rgba(var(--ion-color-step-150-rgb, 235, 235, 235), 0.4) !important;
+  --background: var(--ion-color-step-50, #f9f9f9) !important;
   padding-inline: 8px !important;
 }
 
 .dark .glass-card ion-searchbar {
-  --background: rgba(255, 255, 255, 0.05) !important;
+  --background: #2a2a2a !important;
 }
 
 .glass-card ion-select {
@@ -81,14 +79,14 @@ body.dark, body.ion-palette-dark, .dark {
 
 /* ── Inputs y Buscadores ── */
 .search-container {
-  --background: rgba(var(--ion-color-step-100-rgb, 240, 240, 240), 0.4) !important;
+  --background: var(--ion-color-step-50, #f9f9f9) !important;
   --border-radius: 14px;
   margin-bottom: 8px;
   border: 1px solid var(--glass-border);
 }
 
 .dark .search-container {
-  --background: rgba(255, 255, 255, 0.05) !important;
+  --background: #2a2a2a !important;
 }
 
 /* ── Animaciones ── */

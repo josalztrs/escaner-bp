@@ -361,7 +361,7 @@ const ScanTab: React.FC = () => {
 
                     {isLoadingDeptos && (
                       <IonNote className="ion-padding-start">
-                        <IonSpinner name="crescent" size="small" className="ion-margin-end" />
+                        <IonSpinner name="crescent" className="ion-margin-end" />
                         Cargando...
                       </IonNote>
                     )}
