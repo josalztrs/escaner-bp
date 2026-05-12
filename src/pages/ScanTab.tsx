@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  IonAccordion,
+  IonAccordionGroup,
   IonButton,
   IonCard,
   IonCardContent,
@@ -23,7 +25,7 @@ import {
 } from '@ionic/react';
 import { scanOutline, searchOutline } from 'ionicons/icons';
 import { Capacitor } from '@capacitor/core';
-import { addRecord, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
+import { addRecord, listRecords, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
 import {
   ApiError,
   type ApiErrorInfo,
@@ -140,7 +142,6 @@ const ScanTab: React.FC = () => {
   const [deptos, setDeptos] = useState<string[]>([]);
   const [deptosError, setDeptosError] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<ScanRecord | null>(null);
-  const [lastSavedVisible, setLastSavedVisible] = useState(true);
   const [scannedSN, setScannedSN] = useState<string | null>(null);
   const [equipoData, setEquipoData] = useState<EquipoResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -175,6 +176,12 @@ const ScanTab: React.FC = () => {
 
         const uniqueSorted = Array.from(new Set(labels)).sort((a, b) => a.localeCompare(b, 'es'));
         setDeptos(uniqueSorted);
+
+        // Cargar último registro guardado para que siempre esté visible
+        const history = await listRecords();
+        if (!cancelled && history.length > 0) {
+          setLastSaved(history[0]);
+        }
       } catch (e) {
         if (cancelled) return;
         const msg = e instanceof Error ? e.message : 'No se pudieron cargar los departamentos';
@@ -211,7 +218,6 @@ const ScanTab: React.FC = () => {
   const handleScan = async () => {
     if (!isValidLocation || isScanning) return;
     setIsScanning(true);
-    setLastSavedVisible(false); // fade-out de la card anterior
     setErrorMsg(null);
     setEquipoData(null);
     setScannedSN(null);
@@ -233,7 +239,6 @@ const ScanTab: React.FC = () => {
       const meta = buildRecordMeta(result.equipo, result.serialNumber, location.trim(), { raw: result.raw });
       const saved = await addRecord(meta);
       setLastSaved(saved);
-      setLastSavedVisible(true);
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.info.status === 404) {
@@ -246,7 +251,6 @@ const ScanTab: React.FC = () => {
             httpStatus: 404,
           });
           setLastSaved(saved);
-          setLastSavedVisible(true);
         }
         Haptics.notification({type: NotificationType.Error});
         setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
@@ -265,7 +269,6 @@ const ScanTab: React.FC = () => {
     const sn = manualSN.trim();
     if (!sn || !isValidLocation || isScanning) return;
     setIsScanning(true);
-    setLastSavedVisible(false); // fade-out de la card anterior
     setErrorMsg(null);
     setEquipoData(null);
     setScannedSN(null);
@@ -278,7 +281,6 @@ const ScanTab: React.FC = () => {
       const meta = buildRecordMeta(equipo, sn, location.trim());
       const saved = await addRecord(meta);
       setLastSaved(saved);
-      setLastSavedVisible(true);
       setManualSN('');
     } catch (error) {
       if (error instanceof ApiError) {
@@ -292,7 +294,6 @@ const ScanTab: React.FC = () => {
             httpStatus: 404,
           });
           setLastSaved(saved);
-          setLastSavedVisible(true);
         }
         setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
         return;
@@ -400,7 +401,7 @@ const ScanTab: React.FC = () => {
         </IonButton>
 
         {/* Búsqueda manual por S/N */}
-        <IonCard className="ion-margin-top">
+        <IonCard className="glass-card ion-margin-top">
           <IonCardHeader>
             <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
           </IonCardHeader>
@@ -437,80 +438,78 @@ const ScanTab: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        {lastSaved && (
-          <IonCard
-            className="glass-card ion-margin-top fade-in-up"
-            style={{
-              transition: 'opacity 0.5s ease, transform 0.5s ease',
-              opacity: lastSavedVisible ? 1 : 0,
-              transform: lastSavedVisible ? 'translateY(0)' : 'translateY(-12px)',
-              pointerEvents: lastSavedVisible ? 'auto' : 'none',
-            }}
-          >
-            <IonCardHeader>
-              <IonCardSubtitle>Último registro guardado</IonCardSubtitle>
-              <IonCardTitle color="primary" style={{ fontWeight: 800 }}>{lastSaved.value}</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonItem lines="none">
-                <IonLabel className="ion-text-wrap">
-                  <h3>Dpto. escaneo</h3>
-                  <p>{lastSaved.location}</p>
-                </IonLabel>
-              </IonItem>
-              {lastSaved.depto && (
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Dpto. asignación</h3>
-                    <p>{lastSaved.depto}</p>
-                  </IonLabel>
-                </IonItem>
-              )}
-              {lastSaved.equipoName && (
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Responsable</h3>
-                    <p>{lastSaved.equipoName}</p>
-                  </IonLabel>
-                </IonItem>
-              )}
-              {(lastSaved.marca || lastSaved.modelo) && (
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Marca / modelo</h3>
-                    <p>
-                      {[lastSaved.marca, lastSaved.modelo].filter(Boolean).join(' · ')}
-                    </p>
-                  </IonLabel>
-                </IonItem>
-              )}
-              {lastSaved.message && (
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Nota</h3>
-                    <p>{lastSaved.message}</p>
-                  </IonLabel>
-                </IonItem>
-              )}
-              <IonItem lines="none">
-                <IonLabel className="ion-text-wrap">
-                  <h3>Fecha</h3>
-                  <p>{new Date(lastSaved.createdAt).toLocaleString()}</p>
-                </IonLabel>
-              </IonItem>
-            </IonCardContent>
-          </IonCard>
-        )}
-
-        {/* Resultado del equipo escaneado */}
+        {/* Resultado del equipo escaneado (AHORA ARRIBA) */}
         {equipoData && scannedSN && (
-          <div className="fade-in-up">
+          <div className="fade-in-up ion-margin-top">
             <EquipoResultCard
               resultado={equipoData}
               serialNumber={scannedSN}
               onClear={handleClear}
             />
           </div>
+        )}
+
+        {lastSaved && (
+          <IonAccordionGroup className="ion-margin-top fade-in-up">
+            <IonAccordion value="last-saved" className="glass-card">
+              <IonItem slot="header">
+                <IonLabel>
+                  <IonNote style={{ fontSize: '0.75rem', display: 'block', marginBottom: 4 }}>Último registro guardado</IonNote>
+                  <IonText color="primary">
+                    <h2 style={{ margin: 0, fontWeight: 800 }}>{lastSaved.value}</h2>
+                  </IonText>
+                </IonLabel>
+              </IonItem>
+              <div className="ion-padding" slot="content">
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Dpto. escaneo</h3>
+                    <p>{lastSaved.location}</p>
+                  </IonLabel>
+                </IonItem>
+                {lastSaved.depto && (
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-wrap">
+                      <h3>Dpto. asignación</h3>
+                      <p>{lastSaved.depto}</p>
+                    </IonLabel>
+                  </IonItem>
+                )}
+                {lastSaved.equipoName && (
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-wrap">
+                      <h3>Responsable</h3>
+                      <p>{lastSaved.equipoName}</p>
+                    </IonLabel>
+                  </IonItem>
+                )}
+                {(lastSaved.marca || lastSaved.modelo) && (
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-wrap">
+                      <h3>Marca / modelo</h3>
+                      <p>
+                        {[lastSaved.marca, lastSaved.modelo].filter(Boolean).join(' · ')}
+                      </p>
+                    </IonLabel>
+                  </IonItem>
+                )}
+                {lastSaved.message && (
+                  <IonItem lines="none">
+                    <IonLabel className="ion-text-wrap">
+                      <h3>Nota</h3>
+                      <p>{lastSaved.message}</p>
+                    </IonLabel>
+                  </IonItem>
+                )}
+                <IonItem lines="none">
+                  <IonLabel className="ion-text-wrap">
+                    <h3>Fecha</h3>
+                    <p>{new Date(lastSaved.createdAt).toLocaleString()}</p>
+                  </IonLabel>
+                </IonItem>
+              </div>
+            </IonAccordion>
+          </IonAccordionGroup>
         )}
 
         {errorMsg && (

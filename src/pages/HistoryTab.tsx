@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   IonBadge,
   IonButton,
@@ -10,6 +10,9 @@ import {
   IonList,
   IonNote,
   IonPage,
+  IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
@@ -19,6 +22,7 @@ import {
   warningOutline,
   helpCircleOutline,
   shareOutline,
+  filterOutline,
 } from 'ionicons/icons';
 import { Share } from '@capacitor/share';
 import { clearRecords, listRecords, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
@@ -53,6 +57,8 @@ const DetailLine = ({ label, value }: { label: string; value?: string }) => {
 const HistoryTab: React.FC = () => {
   const [records, setRecords] = useState<ScanRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const refresh = useCallback(async () => {
     const data = await listRecords();
@@ -77,6 +83,23 @@ const HistoryTab: React.FC = () => {
     });
   };
 
+  const filteredRecords = useMemo(() => {
+    return records.filter((r) => {
+      const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
+      const q = searchText.toLowerCase().trim();
+      if (!q) return matchesStatus;
+
+      const matchesQuery =
+        r.value.toLowerCase().includes(q) ||
+        (r.equipoName?.toLowerCase().includes(q) ?? false) ||
+        (r.location.toLowerCase().includes(q) ?? false) ||
+        (r.marca?.toLowerCase().includes(q) ?? false) ||
+        (r.modelo?.toLowerCase().includes(q) ?? false);
+
+      return matchesStatus && matchesQuery;
+    });
+  }, [records, searchText, statusFilter]);
+
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -98,41 +121,74 @@ const HistoryTab: React.FC = () => {
         <IonToolbar>
           <IonTitle>Historial</IonTitle>
         </IonToolbar>
+        <IonToolbar>
+          <IonSearchbar
+            value={searchText}
+            onIonInput={(e) => setSearchText(e.detail.value ?? '')}
+            placeholder="Buscar por S/N, responsable..."
+            debounce={300}
+            className="ion-no-padding ion-padding-horizontal"
+            style={{ '--box-shadow': 'none' }}
+          />
+        </IonToolbar>
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <IonButton
-          expand="block"
-          className="premium-button"
-          onClick={() => {
-            void refresh();
-          }}
-        >
-          Actualizar
-        </IonButton>
+        <div className="glass-card" style={{ padding: '4px 8px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <IonIcon icon={filterOutline} color="medium" style={{ marginLeft: 8 }} />
+          <IonSelect
+            value={statusFilter}
+            onIonChange={(e) => setStatusFilter(e.detail.value)}
+            interface="popover"
+            className="ion-no-padding"
+            style={{ width: '100%' }}
+          >
+            <IonSelectOption value="all">Todos los estados</IonSelectOption>
+            <IonSelectOption value="found">Encontrados</IonSelectOption>
+            <IonSelectOption value="not-found">No registrados</IonSelectOption>
+            <IonSelectOption value="no-assignment">Sin asignación</IonSelectOption>
+          </IonSelect>
+        </div>
 
-        <IonButton
-          expand="block"
-          color="danger"
-          fill="clear"
-          className="ion-margin-bottom"
-          onClick={() => {
-            void (async () => {
-              await clearRecords();
-              await refresh();
-            })();
-          }}
-        >
-          Limpiar historial
-        </IonButton>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+          <IonButton
+            expand="block"
+            className="premium-button"
+            style={{ flex: 1, margin: 0 }}
+            onClick={() => {
+              void refresh();
+            }}
+          >
+            Actualizar
+          </IonButton>
+
+          <IonButton
+            expand="block"
+            color="danger"
+            fill="clear"
+            style={{ margin: 0 }}
+            onClick={() => {
+              void (async () => {
+                await clearRecords();
+                await refresh();
+              })();
+            }}
+          >
+            Limpiar
+          </IonButton>
+        </div>
 
         {loading ? (
           <IonNote color="medium">Cargando...</IonNote>
-        ) : records.length === 0 ? (
-          <IonNote color="medium">Aún no hay registros. Vuelve al tab de Escaneo para crear uno.</IonNote>
+        ) : filteredRecords.length === 0 ? (
+          <IonNote color="medium">
+            {records.length === 0 
+              ? 'Aún no hay registros. Vuelve al tab de Escaneo para crear uno.' 
+              : 'No se encontraron registros que coincidan con los filtros.'}
+          </IonNote>
         ) : (
-          <IonList inset>
-            {records.map((r) => {
+          <IonList inset style={{ background: 'transparent', margin: 0, padding: 0 }}>
+            {filteredRecords.map((r) => {
               const info = getStatusInfo(r.status);
 
               return (
