@@ -81,19 +81,26 @@ const EquipoResultCard: React.FC<EquipoResultCardProps> = ({
   /* ─── Caso 1: Bien no registrado ─── */
   if (isError && message.includes('no está registrado')) {
     return (
-      <IonCard color="danger" className="ion-margin-top" style={{ marginInline: 0 }}>
+      <IonCard className="glass-card ion-margin-top" style={{ borderLeft: '6px solid var(--ion-color-danger)' }}>
         <IonCardHeader>
-          <IonIcon icon={banOutline} slot="start" style={{ fontSize: '2rem', marginBottom: 8 }} />
-          <IonCardTitle>Bien No Encontrado</IonCardTitle>
-          <IonCardSubtitle className="ion-text-capitalize">
-            S/N: {serialNumber}
-          </IonCardSubtitle>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <IonIcon icon={banOutline} color="danger" style={{ fontSize: '2.5rem' }} />
+            <div>
+              <IonCardTitle>Bien No Encontrado</IonCardTitle>
+              <IonCardSubtitle className="ion-text-capitalize">
+                S/N: {serialNumber}
+              </IonCardSubtitle>
+            </div>
+          </div>
         </IonCardHeader>
         <IonCardContent>
-          <p>{String(flat['message'] ?? flat['msg'] ?? 'El serial escaneado no está registrado en el sistema.')}</p>
+          <p style={{ fontSize: '1rem', color: 'var(--ion-color-step-600)' }}>
+            {String(flat['message'] ?? flat['msg'] ?? 'El serial escaneado no está registrado en el sistema.')}
+          </p>
           <IonButton
-            fill="outline"
+            fill="clear"
             expand="block"
+            color="danger"
             className="ion-margin-top"
             onClick={onClear}
           >
@@ -108,19 +115,26 @@ const EquipoResultCard: React.FC<EquipoResultCardProps> = ({
   /* ─── Caso 2: Sin asignación ─── */
   if (isError && message.includes('sin asignación')) {
     return (
-      <IonCard color="warning" className="ion-margin-top" style={{ marginInline: 0 }}>
+      <IonCard className="glass-card ion-margin-top" style={{ borderLeft: '6px solid var(--ion-color-warning)' }}>
         <IonCardHeader>
-          <IonIcon icon={warningOutline} slot="start" style={{ fontSize: '2rem', marginBottom: 8 }} />
-          <IonCardTitle>Pendiente de Asignación</IonCardTitle>
-          <IonCardSubtitle className="ion-text-capitalize">
-            S/N: {serialNumber}
-          </IonCardSubtitle>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <IonIcon icon={warningOutline} color="warning" style={{ fontSize: '2.5rem' }} />
+            <div>
+              <IonCardTitle>Pendiente de Asignación</IonCardTitle>
+              <IonCardSubtitle className="ion-text-capitalize">
+                S/N: {serialNumber}
+              </IonCardSubtitle>
+            </div>
+          </div>
         </IonCardHeader>
         <IonCardContent>
-          <p>{String(flat['message'] ?? flat['msg'] ?? 'Este bien no tiene un responsable asignado actualmente.')}</p>
+          <p style={{ fontSize: '1rem', color: 'var(--ion-color-step-600)' }}>
+            {String(flat['message'] ?? flat['msg'] ?? 'Este bien no tiene un responsable asignado actualmente.')}
+          </p>
           <IonButton
-            fill="outline"
+            fill="clear"
             expand="block"
+            color="warning"
             className="ion-margin-top"
             onClick={onClear}
           >
@@ -136,15 +150,15 @@ const EquipoResultCard: React.FC<EquipoResultCardProps> = ({
   const estado = field(flat, 'ESTADO');
 
   return (
-    <IonCard className="ion-margin-top" style={{ marginInline: 0 }}>
+    <IonCard className="glass-card ion-margin-top">
       <IonCardHeader>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 4 }}>
+        <div className="result-header">
           <div>
             <IonCardSubtitle>Resultado del escaneo</IonCardSubtitle>
-            <IonCardTitle style={{ fontSize: '1.1rem' }}>S/N: {serialNumber}</IonCardTitle>
+            <IonCardTitle color="primary" style={{ fontWeight: 800 }}>S/N: {serialNumber}</IonCardTitle>
           </div>
           {estado !== '—' && (
-            <IonBadge color="success" style={{ fontSize: '0.75rem', padding: '4px 10px' }}>
+            <IonBadge color="success" className="status-badge">
               {estado}
             </IonBadge>
           )}
@@ -238,13 +252,14 @@ const EquipoResultCard: React.FC<EquipoResultCardProps> = ({
 
         {/* ── Botón limpiar ── */}
         <IonButton
-          fill="outline"
+          fill="clear"
           expand="block"
           className="ion-margin-top"
           onClick={onClear}
+          color="medium"
         >
           <IonIcon icon={closeCircleOutline} slot="start" />
-          Limpiar resultado
+          Descartar vista
         </IonButton>
       </IonCardContent>
     </IonCard>

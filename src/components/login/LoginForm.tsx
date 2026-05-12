@@ -97,9 +97,9 @@ const LoginForm: React.FC = () => {
                 <IonGrid style={{ height: '100%' }}>
                     <IonRow className="ion-align-items-center ion-justify-content-center" style={{ height: '100%' }}>
                         <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
-                            <IonCard>
+                            <IonCard className="glass-card">
                                 <IonCardHeader>
-                                    <IonCardTitle className="ion-text-center">Inicia Sesión</IonCardTitle>
+                                    <IonCardTitle className="ion-text-center" style={{ fontWeight: 800, fontSize: '1.8rem' }}>Bienvenido</IonCardTitle>
                                 </IonCardHeader>
 
                                 <div className="ion-padding">
@@ -127,6 +127,7 @@ const LoginForm: React.FC = () => {
                                     <div className="ion-margin-top">
                                         <IonButton
                                             expand="block"
+                                            className="premium-button"
                                             onClick={() => validateOtp(otpValue)}
                                             disabled={otpValue.length !== 5 || validationState.isLoading}
                                         >

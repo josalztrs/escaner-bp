@@ -103,7 +103,7 @@ const HistoryTab: React.FC = () => {
       <IonContent className="ion-padding">
         <IonButton
           expand="block"
-          fill="outline"
+          className="premium-button"
           onClick={() => {
             void refresh();
           }}
@@ -115,6 +115,7 @@ const HistoryTab: React.FC = () => {
           expand="block"
           color="danger"
           fill="clear"
+          className="ion-margin-bottom"
           onClick={() => {
             void (async () => {
               await clearRecords();
@@ -137,10 +138,8 @@ const HistoryTab: React.FC = () => {
               return (
                 <IonItem
                   key={r.id}
-                  style={{
-                    '--border-color': `var(--ion-color-${info.color})`,
-                    borderLeft: `4px solid var(--ion-color-${info.color})`,
-                  } as React.CSSProperties}
+                  className="history-item glass-card"
+                  lines="none"
                 >
                   <IonIcon
                     icon={info.icon}
@@ -163,10 +162,10 @@ const HistoryTab: React.FC = () => {
                   <IonLabel className="ion-text-wrap">
                     {/* Serial + badge */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                      <h2 style={{ margin: 0, fontWeight: 600 }}>{r.value}</h2>
+                      <h2 style={{ margin: 0, fontWeight: 800, fontSize: '1.2rem', color: 'var(--ion-text-color)' }}>{r.value}</h2>
                       <IonBadge
                         color={info.color}
-                        style={{ fontSize: '0.65rem', padding: '2px 7px' }}
+                        className="status-badge"
                       >
                         {info.label}
                       </IonBadge>

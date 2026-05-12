@@ -319,7 +319,7 @@ const ScanTab: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <IonCard style={{ marginInline: 0 }}>
+        <IonCard className="glass-card">
           <IonCardHeader>
             <IonCardTitle>Ubicación / Departamento</IonCardTitle>
             <IonCardSubtitle>Selecciona una ubicación válida para habilitar el escáner</IonCardSubtitle>
@@ -382,7 +382,7 @@ const ScanTab: React.FC = () => {
 
         <IonButton
           expand="block"
-          size="large"
+          className="premium-button"
           onClick={() => void handleScan()}
           disabled={!isValidLocation || isScanning}
         >
@@ -400,12 +400,12 @@ const ScanTab: React.FC = () => {
         </IonButton>
 
         {/* Búsqueda manual por S/N */}
-        <IonCard style={{ marginInline: 0 }} className="ion-margin-top">
+        <IonCard className="ion-margin-top">
           <IonCardHeader>
             <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
-            <IonItem>
+            <IonItem lines="none" className="search-container">
               <IonInput
                 value={manualSN}
                 placeholder="Escribe el serial del equipo"
@@ -418,7 +418,7 @@ const ScanTab: React.FC = () => {
             </IonItem>
             <IonButton
               expand="block"
-              className="ion-margin-top"
+              className="premium-button"
               onClick={() => void handleManualSearch()}
               disabled={!isValidLocation || isScanning || !manualSN.trim()}
             >
@@ -439,9 +439,8 @@ const ScanTab: React.FC = () => {
 
         {lastSaved && (
           <IonCard
-            className="ion-margin-top"
+            className="glass-card ion-margin-top fade-in-up"
             style={{
-              marginInline: 0,
               transition: 'opacity 0.5s ease, transform 0.5s ease',
               opacity: lastSavedVisible ? 1 : 0,
               transform: lastSavedVisible ? 'translateY(0)' : 'translateY(-12px)',
@@ -450,7 +449,7 @@ const ScanTab: React.FC = () => {
           >
             <IonCardHeader>
               <IonCardSubtitle>Último registro guardado</IonCardSubtitle>
-              <IonCardTitle>{lastSaved.value}</IonCardTitle>
+              <IonCardTitle color="primary" style={{ fontWeight: 800 }}>{lastSaved.value}</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
               <IonItem lines="none">
@@ -505,11 +504,7 @@ const ScanTab: React.FC = () => {
 
         {/* Resultado del equipo escaneado */}
         {equipoData && scannedSN && (
-          <div
-            style={{
-              animation: 'fadeInUp 0.45s ease both',
-            }}
-          >
+          <div className="fade-in-up">
             <EquipoResultCard
               resultado={equipoData}
               serialNumber={scannedSN}
