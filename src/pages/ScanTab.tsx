@@ -8,7 +8,9 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
@@ -16,12 +18,13 @@ import {
   IonLabel,
   IonList,
   IonNote,
-  IonText,
   IonPage,
+  IonRow,
   IonSearchbar,
   IonSpinner,
   IonTitle,
   IonToolbar,
+  IonText,
 } from '@ionic/react';
 import { scanOutline, searchOutline } from 'ionicons/icons';
 import { Capacitor } from '@capacitor/core';
@@ -320,208 +323,218 @@ const ScanTab: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <IonCard className="glass-card">
-          <IonCardHeader>
-            <IonCardTitle>Ubicación / Departamento</IonCardTitle>
-            <IonCardSubtitle>Selecciona una ubicación válida para habilitar el escáner</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonSearchbar
-              ref={(el) => {
-                searchbarRef.current = el;
-              }}
-              value={location}
-              placeholder={isLoadingDeptos ? 'Cargando departamentos...' : 'Busca y selecciona un departamento'}
-              onIonInput={(e) => {
-                setLocation(e.detail.value ?? '');
-                setShowSuggestions(true);
-              }}
-              onIonFocus={() => setShowSuggestions(true)}
-              onIonBlur={() => {
-                // pequeño delay para permitir click en sugerencia
-                setTimeout(() => setShowSuggestions(false), 150);
-              }}
-              debounce={0}
-              inputmode="search"
-              showClearButton="focus"
-            />
+        <div className="responsive-container">
+          <IonGrid className="ion-no-padding">
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="12" sizeMd="10" sizeLg="8">
+                <IonCard className="glass-card">
+                  <IonCardHeader>
+                    <IonCardTitle>Ubicación / Departamento</IonCardTitle>
+                    <IonCardSubtitle>Selecciona una ubicación válida para habilitar el escáner</IonCardSubtitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <IonSearchbar
+                      ref={(el) => {
+                        searchbarRef.current = el;
+                      }}
+                      value={location}
+                      placeholder={isLoadingDeptos ? 'Cargando departamentos...' : 'Busca y selecciona un departamento'}
+                      onIonInput={(e) => {
+                        setLocation(e.detail.value ?? '');
+                        setShowSuggestions(true);
+                      }}
+                      onIonFocus={() => setShowSuggestions(true)}
+                      onIonBlur={() => {
+                        // pequeño delay para permitir click en sugerencia
+                        setTimeout(() => setShowSuggestions(false), 150);
+                      }}
+                      debounce={0}
+                      inputmode="search"
+                      showClearButton="focus"
+                    />
 
-            {deptosError && (
-              <IonNote color="danger">
-                No se pudieron cargar los departamentos desde la API. {deptosError}
-              </IonNote>
-            )}
+                    {deptosError && (
+                      <IonNote color="danger" className="ion-padding-start">
+                        No se pudieron cargar los departamentos. {deptosError}
+                      </IonNote>
+                    )}
 
-            {isLoadingDeptos && (
-              <IonNote>
-                <IonSpinner name="crescent" className="ion-margin-end" />
-                Cargando departamentos...
-              </IonNote>
-            )}
+                    {isLoadingDeptos && (
+                      <IonNote className="ion-padding-start">
+                        <IonSpinner name="crescent" size="small" className="ion-margin-end" />
+                        Cargando...
+                      </IonNote>
+                    )}
 
-            {!isValidLocation && location.trim().length > 0 && (
-              <IonNote color="danger">Ubicación no válida. Debe coincidir con la lista.</IonNote>
-            )}
+                    {!isValidLocation && location.trim().length > 0 && (
+                      <IonNote color="danger" className="ion-padding-start">Ubicación no válida.</IonNote>
+                    )}
 
-            {showSuggestions && suggestions.length > 0 && (
-              <IonList inset style={{ marginTop: 8 }}>
-                {suggestions.map((d) => (
-                  <IonItem
-                    key={d}
-                    button
-                    onClick={() => {
-                      void pickLocation(d);
-                    }}
-                  >
-                    <IonLabel>{d}</IonLabel>
-                  </IonItem>
-                ))}
-              </IonList>
-            )}
-          </IonCardContent>
-        </IonCard>
+                    {showSuggestions && suggestions.length > 0 && (
+                      <IonList inset className="fade-in-up" style={{ marginTop: 12, borderRadius: 12 }}>
+                        {suggestions.map((d) => (
+                          <IonItem
+                            key={d}
+                            button
+                            onClick={() => {
+                              void pickLocation(d);
+                            }}
+                          >
+                            <IonLabel>{d}</IonLabel>
+                          </IonItem>
+                        ))}
+                      </IonList>
+                    )}
+                  </IonCardContent>
+                </IonCard>
 
-        <IonButton
-          expand="block"
-          className="premium-button"
-          onClick={() => void handleScan()}
-          disabled={!isValidLocation || isScanning}
-        >
-          {isScanning ? (
-            <>
-              <IonSpinner name="crescent" className="ion-margin-end" />
-              Escaneando...
-            </>
-          ) : (
-            <>
-              <IonIcon icon={scanOutline} slot="start" />
-              Iniciar escaneo
-            </>
-          )}
-        </IonButton>
+                <IonButton
+                  expand="block"
+                  className="premium-button ion-margin-vertical"
+                  onClick={() => void handleScan()}
+                  disabled={!isValidLocation || isScanning}
+                >
+                  {isScanning ? (
+                    <>
+                      <IonSpinner name="crescent" className="ion-margin-end" />
+                      Escaneando...
+                    </>
+                  ) : (
+                    <>
+                      <IonIcon icon={scanOutline} slot="start" />
+                      Iniciar escaneo
+                    </>
+                  )}
+                </IonButton>
 
-        {/* Búsqueda manual por S/N */}
-        <IonCard className="glass-card ion-margin-top">
-          <IonCardHeader>
-            <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem lines="none" className="search-container">
-              <IonInput
-                value={manualSN}
-                placeholder="Escribe el serial del equipo"
-                onIonInput={(e) => setManualSN(e.detail.value ?? '')}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') void handleManualSearch();
-                }}
-                clearInput
-              />
-            </IonItem>
-            <IonButton
-              expand="block"
-              className="premium-button"
-              onClick={() => void handleManualSearch()}
-              disabled={!isValidLocation || isScanning || !manualSN.trim()}
-            >
-              {isScanning ? (
-                <>
-                  <IonSpinner name="crescent" className="ion-margin-end" />
-                  Buscando...
-                </>
-              ) : (
-                <>
-                  <IonIcon icon={searchOutline} slot="start" />
-                  Buscar por serial
-                </>
-              )}
-            </IonButton>
-          </IonCardContent>
-        </IonCard>
+                {/* Búsqueda manual por S/N */}
+                <IonCard className="glass-card ion-margin-top">
+                  <IonCardHeader>
+                    <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <IonItem lines="none" className="search-container">
+                      <IonInput
+                        value={manualSN}
+                        placeholder="Escribe el serial del equipo"
+                        onIonInput={(e) => setManualSN(e.detail.value ?? '')}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') void handleManualSearch();
+                        }}
+                        clearInput
+                      />
+                    </IonItem>
+                    <IonButton
+                      expand="block"
+                      className="premium-button"
+                      onClick={() => void handleManualSearch()}
+                      disabled={!isValidLocation || isScanning || !manualSN.trim()}
+                    >
+                      {isScanning ? (
+                        <>
+                          <IonSpinner name="crescent" className="ion-margin-end" />
+                          Buscando...
+                        </>
+                      ) : (
+                        <>
+                          <IonIcon icon={searchOutline} slot="start" />
+                          Buscar por serial
+                        </>
+                      )}
+                    </IonButton>
+                  </IonCardContent>
+                </IonCard>
 
-        {/* Resultado del equipo escaneado (AHORA ARRIBA) */}
-        {equipoData && scannedSN && (
-          <div className="fade-in-up ion-margin-top">
-            <EquipoResultCard
-              resultado={equipoData}
-              serialNumber={scannedSN}
-              onClear={handleClear}
-            />
-          </div>
-        )}
-
-        {lastSaved && (
-          <IonAccordionGroup className="ion-margin-top fade-in-up">
-            <IonAccordion value="last-saved" className="glass-card">
-              <IonItem slot="header">
-                <IonLabel>
-                  <IonNote style={{ fontSize: '0.75rem', display: 'block', marginBottom: 4 }}>Último registro guardado</IonNote>
-                  <IonText color="primary">
-                    <h2 style={{ margin: 0, fontWeight: 800 }}>{lastSaved.value}</h2>
-                  </IonText>
-                </IonLabel>
-              </IonItem>
-              <div className="ion-padding" slot="content">
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Dpto. escaneo</h3>
-                    <p>{lastSaved.location}</p>
-                  </IonLabel>
-                </IonItem>
-                {lastSaved.depto && (
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-wrap">
-                      <h3>Dpto. asignación</h3>
-                      <p>{lastSaved.depto}</p>
-                    </IonLabel>
-                  </IonItem>
+                {/* Resultado del equipo escaneado (AHORA ARRIBA) */}
+                {equipoData && scannedSN && (
+                  <div className="fade-in-up ion-margin-top">
+                    <EquipoResultCard
+                      resultado={equipoData}
+                      serialNumber={scannedSN}
+                      onClear={handleClear}
+                    />
+                  </div>
                 )}
-                {lastSaved.equipoName && (
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-wrap">
-                      <h3>Responsable</h3>
-                      <p>{lastSaved.equipoName}</p>
-                    </IonLabel>
-                  </IonItem>
-                )}
-                {(lastSaved.marca || lastSaved.modelo) && (
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-wrap">
-                      <h3>Marca / modelo</h3>
-                      <p>
-                        {[lastSaved.marca, lastSaved.modelo].filter(Boolean).join(' · ')}
-                      </p>
-                    </IonLabel>
-                  </IonItem>
-                )}
-                {lastSaved.message && (
-                  <IonItem lines="none">
-                    <IonLabel className="ion-text-wrap">
-                      <h3>Nota</h3>
-                      <p>{lastSaved.message}</p>
-                    </IonLabel>
-                  </IonItem>
-                )}
-                <IonItem lines="none">
-                  <IonLabel className="ion-text-wrap">
-                    <h3>Fecha</h3>
-                    <p>{new Date(lastSaved.createdAt).toLocaleString()}</p>
-                  </IonLabel>
-                </IonItem>
-              </div>
-            </IonAccordion>
-          </IonAccordionGroup>
-        )}
 
-        {errorMsg && (
-          <IonCard color="danger" className="ion-margin-top" style={{ marginInline: 0 }}>
-            <IonCardContent>
-              <IonText>
-                <h3 style={{ marginTop: 0 }}>Error al obtener datos</h3>
-                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0 }}>{errorMsg}</pre>
-              </IonText>
-            </IonCardContent>
-          </IonCard>
-        )}
+                {lastSaved && (
+                  <IonAccordionGroup className="ion-margin-top fade-in-up">
+                    <IonAccordion value="last-saved" className="glass-card">
+                      <IonItem slot="header">
+                        <IonLabel>
+                          <IonNote style={{ fontSize: '0.75rem', display: 'block', marginBottom: 4 }}>Último registro guardado</IonNote>
+                          <IonText color="primary">
+                            <h2 style={{ margin: 0, fontWeight: 800 }}>{lastSaved.value}</h2>
+                          </IonText>
+                        </IonLabel>
+                      </IonItem>
+                      <div className="ion-padding" slot="content">
+                        <IonList lines="none" className="ion-no-padding">
+                          <IonItem>
+                            <IonLabel className="ion-text-wrap">
+                              <h3>Dpto. escaneo</h3>
+                              <p>{lastSaved.location}</p>
+                            </IonLabel>
+                          </IonItem>
+                          {lastSaved.depto && (
+                            <IonItem>
+                              <IonLabel className="ion-text-wrap">
+                                <h3>Dpto. asignación</h3>
+                                <p>{lastSaved.depto}</p>
+                              </IonLabel>
+                            </IonItem>
+                          )}
+                          {lastSaved.equipoName && (
+                            <IonItem>
+                              <IonLabel className="ion-text-wrap">
+                                <h3>Responsable</h3>
+                                <p style={{ textTransform: 'capitalize' }}>{lastSaved.equipoName.toLowerCase()}</p>
+                              </IonLabel>
+                            </IonItem>
+                          )}
+                          {(lastSaved.marca || lastSaved.modelo) && (
+                            <IonItem>
+                              <IonLabel className="ion-text-wrap">
+                                <h3>Marca / modelo</h3>
+                                <p>
+                                  {[lastSaved.marca, lastSaved.modelo].filter(Boolean).join(' · ')}
+                                </p>
+                              </IonLabel>
+                            </IonItem>
+                          )}
+                          {lastSaved.message && (
+                            <IonItem>
+                              <IonLabel className="ion-text-wrap">
+                                <h3>Nota</h3>
+                                <p>{lastSaved.message}</p>
+                              </IonLabel>
+                            </IonItem>
+                          )}
+                          <IonItem>
+                            <IonLabel className="ion-text-wrap">
+                              <h3>Fecha</h3>
+                              <p>{new Date(lastSaved.createdAt).toLocaleString()}</p>
+                            </IonLabel>
+                          </IonItem>
+                        </IonList>
+                      </div>
+                    </IonAccordion>
+                  </IonAccordionGroup>
+                )}
+
+                {errorMsg && (
+                  <IonCard color="danger" className="ion-margin-top glass-card" style={{ border: 'none' }}>
+                    <IonCardContent>
+                      <IonText>
+                        <h3 style={{ marginTop: 0, fontWeight: 700 }}>Error al obtener datos</h3>
+                        <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0, fontSize: '0.9rem' }}>{errorMsg}</pre>
+                      </IonText>
+                    </IonCardContent>
+                  </IonCard>
+                )}
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </div>
       </IonContent>
     </IonPage>
   );

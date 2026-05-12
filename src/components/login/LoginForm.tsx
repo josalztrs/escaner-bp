@@ -11,8 +11,10 @@ import {
     IonCol, 
     IonText,
     IonContent,
-    IonPage
+    IonPage,
+    IonIcon
 } from "@ionic/react";
+import { shieldCheckmarkOutline } from 'ionicons/icons';
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CapacitorHttp } from '@capacitor/core';
@@ -96,10 +98,35 @@ const LoginForm: React.FC = () => {
             <IonContent className="ion-padding">
                 <IonGrid style={{ height: '100%' }}>
                     <IonRow className="ion-align-items-center ion-justify-content-center" style={{ height: '100%' }}>
-                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
-                            <IonCard>
+                        <IonCol size="12" sizeMd="6" sizeLg="5" sizeXl="4">
+                            {/* Logo / Icon Area */}
+                            <div className="ion-text-center ion-margin-bottom fade-in-up" style={{ marginBottom: '2rem' }}>
+                                <div style={{
+                                    background: 'var(--premium-gradient)',
+                                    width: '80px',
+                                    height: '80px',
+                                    borderRadius: '24px',
+                                    margin: '0 auto',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    boxShadow: '0 10px 25px rgba(56, 128, 255, 0.4)',
+                                    marginBottom: '1rem'
+                                }}>
+                                    <IonIcon 
+                                        icon={shieldCheckmarkOutline} 
+                                        style={{ fontSize: '40px', color: 'white' }} 
+                                    />
+                                </div>
+                                <h1 style={{ fontWeight: 800, margin: 0, fontSize: '1.8rem', letterSpacing: '-0.5px' }}>
+                                    Escaner<span style={{ color: 'var(--ion-color-primary)' }}>Pro</span>
+                                </h1>
+                                <p style={{ color: 'var(--ion-color-medium)', margin: '4px 0 0' }}>Gestión de Activos Gubernamentales</p>
+                            </div>
+
+                            <IonCard className="glass-card fade-in-up" style={{ animationDelay: '0.1s' }}>
                                 <IonCardHeader>
-                                    <IonCardTitle className="ion-text-center">Inicia Sesión</IonCardTitle>
+                                    <IonCardTitle className="ion-text-center" style={{ fontWeight: 700, fontSize: '1.2rem' }}>Acceso al Sistema</IonCardTitle>
                                 </IonCardHeader>
 
                                 <div className="ion-padding">
@@ -107,7 +134,7 @@ const LoginForm: React.FC = () => {
                                         <p className="ion-text-center">Por favor, ingresa la llave de acceso al sistema.</p>
                                     </IonText>
                                     
-                                    <IonItem lines="none" className="ion-margin-vertical">
+                                    <IonItem lines="none" className="ion-margin-vertical" style={{ '--background': 'transparent' }}>
                                         <IonInputOtp
                                             length={5}
                                             type="number"
@@ -127,6 +154,7 @@ const LoginForm: React.FC = () => {
                                     <div className="ion-margin-top">
                                         <IonButton
                                             expand="block"
+                                            className="premium-button"
                                             onClick={() => validateOtp(otpValue)}
                                             disabled={otpValue.length !== 5 || validationState.isLoading}
                                         >

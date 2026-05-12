@@ -1,0 +1,138 @@
+/* ── Tokens de Diseño ── */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --premium-gradient: linear-gradient(135deg, #3880ff 0%, #6370ff 100%);
+  --premium-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Ajustes para iOS */
+.ios {
+  --glass-bg: rgba(255, 255, 255, 0.6);
+}
+
+/* ── MODO OSCURO ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg: rgba(30, 30, 30, 0.85) !important;
+    --glass-border: rgba(255, 255, 255, 0.12) !important;
+  }
+}
+
+/* Soporte para clase .dark manual o de Ionic */
+body.dark, body.ion-palette-dark, .dark {
+  --glass-bg: rgba(30, 30, 30, 0.85) !important;
+  --glass-border: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ── Contenedor Responsivo ── */
+.responsive-container {
+  max-width: 800px;
+  margin: 0 auto !important;
+  width: 100%;
+}
+
+/* ── Estilos Premium ── */
+.glass-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--premium-shadow) !important;
+  margin-inline: 0 !important;
+  overflow: hidden;
+}
+
+/* Forzar transparencia en componentes internos dentro de glass-card */
+.glass-card ion-item,
+.glass-card ion-list,
+.glass-card ion-accordion {
+  --background: transparent !important;
+  background: transparent !important;
+}
+
+.glass-card ion-searchbar {
+  --background: rgba(var(--ion-color-step-150-rgb, 235, 235, 235), 0.4) !important;
+  padding-inline: 8px !important;
+}
+
+.dark .glass-card ion-searchbar {
+  --background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.glass-card ion-select {
+  --padding-start: 12px;
+}
+
+.premium-button {
+  --background: var(--premium-gradient) !important;
+  --border-radius: 14px !important;
+  --box-shadow: 0 4px 15px rgba(56, 128, 255, 0.3) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  height: 54px;
+  margin-top: 16px;
+}
+
+.premium-button::part(native) {
+  padding-inline: 24px;
+}
+
+/* ── Inputs y Buscadores ── */
+.search-container {
+  --background: rgba(var(--ion-color-step-100-rgb, 240, 240, 240), 0.4) !important;
+  --border-radius: 14px;
+  margin-bottom: 8px;
+  border: 1px solid var(--glass-border);
+}
+
+.dark .search-container {
+  --background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ── Animaciones ── */
+.fade-in-up {
+  animation: fadeInUp 0.5s ease backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Ajustes de Listas ── */
+.history-item {
+  margin-bottom: 12px !important;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+.status-badge {
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.5px;
+}
+
+/* ── Responsividad para Tablets/Desktop ── */
+@media (min-width: 768px) {
+  .responsive-container {
+    padding-top: 24px;
+  }
+  
+  ion-content {
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+  }
+}

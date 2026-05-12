@@ -2,7 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   IonBadge,
   IonButton,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
@@ -10,6 +12,7 @@ import {
   IonList,
   IonNote,
   IonPage,
+  IonRow,
   IonSearchbar,
   IonSelect,
   IonSelectOption,
@@ -134,61 +137,65 @@ const HistoryTab: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-        <div className="glass-card" style={{ padding: '4px 8px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <IonIcon icon={filterOutline} color="medium" style={{ marginLeft: 8 }} />
-          <IonSelect
-            value={statusFilter}
-            onIonChange={(e) => setStatusFilter(e.detail.value)}
-            interface="popover"
-            className="ion-no-padding"
-            style={{ width: '100%' }}
-          >
-            <IonSelectOption value="all">Todos los estados</IonSelectOption>
-            <IonSelectOption value="found">Encontrados</IonSelectOption>
-            <IonSelectOption value="not-found">No registrados</IonSelectOption>
-            <IonSelectOption value="no-assignment">Sin asignación</IonSelectOption>
-          </IonSelect>
-        </div>
+        <div className="responsive-container">
+          <IonGrid className="ion-no-padding">
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="12" sizeMd="10" sizeLg="8">
+                <div className="glass-card" style={{ padding: '4px 8px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <IonIcon icon={filterOutline} color="medium" style={{ marginLeft: 8 }} />
+                  <IonSelect
+                    value={statusFilter}
+                    onIonChange={(e) => setStatusFilter(e.detail.value)}
+                    interface="popover"
+                    className="ion-no-padding"
+                    style={{ width: '100%' }}
+                  >
+                    <IonSelectOption value="all">Todos los estados</IonSelectOption>
+                    <IonSelectOption value="found">Encontrados</IonSelectOption>
+                    <IonSelectOption value="not-found">No registrados</IonSelectOption>
+                    <IonSelectOption value="no-assignment">Sin asignación</IonSelectOption>
+                  </IonSelect>
+                </div>
 
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          <IonButton
-            expand="block"
-            className="premium-button"
-            style={{ flex: 1, margin: 0 }}
-            onClick={() => {
-              void refresh();
-            }}
-          >
-            Actualizar
-          </IonButton>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+                  <IonButton
+                    expand="block"
+                    className="premium-button"
+                    style={{ flex: 1, margin: 0 }}
+                    onClick={() => {
+                      void refresh();
+                    }}
+                  >
+                    Actualizar
+                  </IonButton>
 
-          <IonButton
-            expand="block"
-            color="danger"
-            fill="clear"
-            style={{ margin: 0 }}
-            onClick={() => {
-              void (async () => {
-                await clearRecords();
-                await refresh();
-              })();
-            }}
-          >
-            Limpiar
-          </IonButton>
-        </div>
+                  <IonButton
+                    expand="block"
+                    color="danger"
+                    fill="clear"
+                    style={{ margin: 0 }}
+                    onClick={() => {
+                      void (async () => {
+                        await clearRecords();
+                        await refresh();
+                      })();
+                    }}
+                  >
+                    Limpiar
+                  </IonButton>
+                </div>
 
-        {loading ? (
-          <IonNote color="medium">Cargando...</IonNote>
-        ) : filteredRecords.length === 0 ? (
-          <IonNote color="medium">
-            {records.length === 0 
-              ? 'Aún no hay registros. Vuelve al tab de Escaneo para crear uno.' 
-              : 'No se encontraron registros que coincidan con los filtros.'}
-          </IonNote>
-        ) : (
-          <IonList inset style={{ background: 'transparent', margin: 0, padding: 0 }}>
-            {filteredRecords.map((r) => {
+                {loading ? (
+                  <IonNote color="medium">Cargando...</IonNote>
+                ) : filteredRecords.length === 0 ? (
+                  <IonNote color="medium">
+                    {records.length === 0 
+                      ? 'Aún no hay registros. Vuelve al tab de Escaneo para crear uno.' 
+                      : 'No se encontraron registros que coincidan con los filtros.'}
+                  </IonNote>
+                ) : (
+                  <IonList inset style={{ background: 'transparent', margin: 0, padding: 0 }}>
+                    {filteredRecords.map((r) => {
               const info = getStatusInfo(r.status);
 
               return (
@@ -289,9 +296,13 @@ const HistoryTab: React.FC = () => {
                   </IonLabel>
                 </IonItem>
               );
-            })}
-          </IonList>
-        )}
+                    })}
+                  </IonList>
+                )}
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </div>
       </IonContent>
     </IonPage>
   );
