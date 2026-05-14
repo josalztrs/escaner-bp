@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   IonBadge,
   IonButton,
   IonCol,
   IonContent,
+  IonDatetime,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -12,6 +13,7 @@ import {
   IonList,
   IonNote,
   IonPage,
+  IonPopover,
   IonRow,
   IonSearchbar,
   IonSelect,
@@ -26,6 +28,10 @@ import {
   helpCircleOutline,
   shareOutline,
   filterOutline,
+  copyOutline,
+  checkmarkOutline,
+  calendarOutline,
+  closeCircleOutline,
 } from 'ionicons/icons';
 import { Share } from '@capacitor/share';
 import { clearRecords, listRecords, ScanRecord, ScanStatus } from '../services/scanHistoryStore';
@@ -62,11 +68,36 @@ const HistoryTab: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [dateFrom, setDateFrom] = useState<string | null>(null);
+  const [dateTo, setDateTo] = useState<string | null>(null);
+  const popoverFromRef = useRef<HTMLIonPopoverElement>(null);
+  const popoverToRef = useRef<HTMLIonPopoverElement>(null);
 
   const refresh = useCallback(async () => {
     const data = await listRecords();
     setRecords(data);
   }, []);
+
+  const handleCopySerial = async (record: ScanRecord) => {
+    try {
+      await navigator.clipboard.writeText(record.value);
+      setCopiedId(record.id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch {
+      /* Fallback for older browsers / webview */
+      const ta = document.createElement('textarea');
+      ta.value = record.value;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      setCopiedId(record.id);
+      setTimeout(() => setCopiedId(null), 1500);
+    }
+  };
 
   const handleShare = async (record: ScanRecord) => {
     const info = getStatusInfo(record.status);
@@ -89,6 +120,19 @@ const HistoryTab: React.FC = () => {
   const filteredRecords = useMemo(() => {
     return records.filter((r) => {
       const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
+
+      /* ── Date range filter ── */
+      if (dateFrom) {
+        const from = new Date(dateFrom);
+        from.setHours(0, 0, 0, 0);
+        if (new Date(r.createdAt) < from) return false;
+      }
+      if (dateTo) {
+        const to = new Date(dateTo);
+        to.setHours(23, 59, 59, 999);
+        if (new Date(r.createdAt) > to) return false;
+      }
+
       const q = searchText.toLowerCase().trim();
       if (!q) return matchesStatus;
 
@@ -101,7 +145,7 @@ const HistoryTab: React.FC = () => {
 
       return matchesStatus && matchesQuery;
     });
-  }, [records, searchText, statusFilter]);
+  }, [records, searchText, statusFilter, dateFrom, dateTo]);
 
   useEffect(() => {
     let mounted = true;
@@ -157,6 +201,94 @@ const HistoryTab: React.FC = () => {
                   </IonSelect>
                 </div>
 
+                {/* ── Date range filter ── */}
+                <div className="glass-card" style={{ padding: '10px 12px', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                    <IonIcon icon={calendarOutline} color="medium" />
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--ion-color-medium)' }}>Filtrar por fecha</span>
+                    {(dateFrom || dateTo) && (
+                      <IonButton
+                        fill="clear"
+                        size="small"
+                        color="danger"
+                        style={{ marginLeft: 'auto', '--padding-start': '4px', '--padding-end': '4px' }}
+                        onClick={() => { setDateFrom(null); setDateTo(null); }}
+                      >
+                        <IonIcon icon={closeCircleOutline} slot="start" style={{ fontSize: '1rem' }} />
+                        Limpiar
+                      </IonButton>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {/* Desde */}
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.75rem', color: 'var(--ion-color-medium)', marginBottom: 4, display: 'block' }}>Desde</label>
+                      <IonButton
+                        id="date-from-trigger"
+                        expand="block"
+                        fill="outline"
+                        color="medium"
+                        size="small"
+                        style={{
+                          '--border-radius': '8px',
+                          margin: 0,
+                          textTransform: 'none',
+                          fontWeight: 400,
+                          fontSize: '0.85rem',
+                        }}
+                      >
+                        {dateFrom ? new Date(dateFrom).toLocaleDateString() : 'dd/mm/aaaa'}
+                      </IonButton>
+                      <IonPopover ref={popoverFromRef} trigger="date-from-trigger" showBackdrop={false}>
+                        <IonDatetime
+                          presentation="date"
+                          value={dateFrom ?? undefined}
+                          max={dateTo ?? new Date().toISOString()}
+                          onIonChange={(e) => {
+                            const val = e.detail.value;
+                            setDateFrom(typeof val === 'string' ? val : null);
+                            popoverFromRef.current?.dismiss();
+                          }}
+                        />
+                      </IonPopover>
+                    </div>
+
+                    {/* Hasta */}
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: '0.75rem', color: 'var(--ion-color-medium)', marginBottom: 4, display: 'block' }}>Hasta</label>
+                      <IonButton
+                        id="date-to-trigger"
+                        expand="block"
+                        fill="outline"
+                        color="medium"
+                        size="small"
+                        style={{
+                          '--border-radius': '8px',
+                          margin: 0,
+                          textTransform: 'none',
+                          fontWeight: 400,
+                          fontSize: '0.85rem',
+                        }}
+                      >
+                        {dateTo ? new Date(dateTo).toLocaleDateString() : 'dd/mm/aaaa'}
+                      </IonButton>
+                      <IonPopover ref={popoverToRef} trigger="date-to-trigger" showBackdrop={false}>
+                        <IonDatetime
+                          presentation="date"
+                          value={dateTo ?? undefined}
+                          min={dateFrom ?? undefined}
+                          max={new Date().toISOString()}
+                          onIonChange={(e) => {
+                            const val = e.detail.value;
+                            setDateTo(typeof val === 'string' ? val : null);
+                            popoverToRef.current?.dismiss();
+                          }}
+                        />
+                      </IonPopover>
+                    </div>
+                  </div>
+                </div>
+
                 <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
                   <IonButton
                     expand="block"
@@ -210,18 +342,36 @@ const HistoryTab: React.FC = () => {
                     slot="start"
                     style={{ fontSize: '1.5rem' }}
                   />
-                  <IonButton
-                    fill="clear"
-                    slot="end"
-                    color="primary"
-                    size="large"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      void handleShare(r);
-                    }}
-                  >
-                    <IonIcon icon={shareOutline} slot="icon-only" style={{ fontSize: '1.8rem' }} />
-                  </IonButton>
+                  <div slot="end" style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                    <IonButton
+                      fill="clear"
+                      color={copiedId === r.id ? 'success' : 'medium'}
+                      size="default"
+                      title="Copiar serial"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void handleCopySerial(r);
+                      }}
+                    >
+                      <IonIcon
+                        icon={copiedId === r.id ? checkmarkOutline : copyOutline}
+                        slot="icon-only"
+                        style={{ fontSize: '1.4rem' }}
+                      />
+                    </IonButton>
+                    <IonButton
+                      fill="clear"
+                      color="primary"
+                      size="default"
+                      title="Compartir"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void handleShare(r);
+                      }}
+                    >
+                      <IonIcon icon={shareOutline} slot="icon-only" style={{ fontSize: '1.4rem' }} />
+                    </IonButton>
+                  </div>
                   <IonLabel className="ion-text-wrap">
                     {/* Serial + badge */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>

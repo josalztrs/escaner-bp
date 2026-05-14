@@ -69,4 +69,5 @@ io.ionic.starter.app-debug-67 C:\Users\Jose\prueba-escaner\node_modules\@capacit
 io.ionic.starter.app-debug-68 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\packaged_res\debug\packageDebugResources
 io.ionic.starter.app-debug-69 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\packaged_res\debug\packageDebugResources
 io.ionic.starter.app-debug-70 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\preferences\android\build\intermediates\packaged_res\debug\packageDebugResources
-io.ionic.starter.app-debug-71 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\packaged_res\debug\packageDebugResources
+io.ionic.starter.app-debug-71 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\share\android\build\intermediates\packaged_res\debug\packageDebugResources
+io.ionic.starter.app-debug-72 C:\Users\Jose\prueba-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\packaged_res\debug\packageDebugResources
