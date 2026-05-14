@@ -14,7 +14,7 @@ import {
     IonPage,
     IonIcon
 } from "@ionic/react";
-import { shieldCheckmarkOutline } from 'ionicons/icons';
+import { barcodeOutline} from 'ionicons/icons';
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CapacitorHttp } from '@capacitor/core';
@@ -114,14 +114,14 @@ const LoginForm: React.FC = () => {
                                     marginBottom: '1rem'
                                 }}>
                                     <IonIcon 
-                                        icon={shieldCheckmarkOutline} 
+                                        icon={barcodeOutline} 
                                         style={{ fontSize: '40px', color: 'white' }} 
                                     />
                                 </div>
                                 <h1 style={{ fontWeight: 800, margin: 0, fontSize: '1.8rem', letterSpacing: '-0.5px' }}>
-                                    Escaner<span style={{ color: 'var(--ion-color-primary)' }}>Pro</span>
+                                    SID<span style={{ color: 'var(--ion-color-primary)' }}>REB</span>
                                 </h1>
-                                <p style={{ color: 'var(--ion-color-medium)', margin: '4px 0 0' }}>Gestión de Activos Gubernamentales</p>
+                                <p style={{ color: 'var(--ion-color-medium)', margin: '4px 0 0' }}>Sistema de Disposición Remota de Bienes</p>
                             </div>
 
                             <IonCard className="glass-card fade-in-up" style={{ animationDelay: '0.1s' }}>

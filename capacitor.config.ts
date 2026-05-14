@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'prueba escaner',
+  appId: 'com.bolipuertos.sidreb',
+  appName: 'SIDREB',
   webDir: 'dist',
   plugins: {
     CapacitorHttp: {

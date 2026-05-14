@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "prueba escaner",
+	"appId": "com.bolipuertos.sidreb",
+	"appName": "SIDREB",
 	"webDir": "dist",
 	"plugins": {
 		"CapacitorHttp": {
