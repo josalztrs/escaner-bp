@@ -50,7 +50,7 @@ const LoginForm: React.FC = () => {
         setApiStatus({ state: 'loading', message: null });
         try {
             const response = await CapacitorHttp.get({
-                url: 'http://10.60.20.5:8014/api/v1/status',
+                url: 'http://192.168.0.100:8014/api/v1/status',
             });
             if (response.status === 200) {
                 setApiStatus({ state: 'ok', message: 'Servidor operativo' });
@@ -70,7 +70,7 @@ const LoginForm: React.FC = () => {
         setValidationState({ isValid: null, isLoading: true, error: null });
 
         try {
-            const url = 'http://10.60.20.5:8014/api/v1/auth/login';
+            const url = 'http://192.168.0.100:8014/api/v1/auth/login';
             const payload = { pin: value };
 
             const response = await CapacitorHttp.post({

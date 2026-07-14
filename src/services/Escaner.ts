@@ -8,7 +8,7 @@ import {
 import { Preferences } from '@capacitor/preferences';
 
 /** URL base de la API de equipos */
-const API_BASE_URL = 'http://10.60.20.5:8014/api/v1/equipo';
+const API_BASE_URL = 'http://192.168.0.100:8014/api/v1/equipo';
 const AUTH_TOKEN_KEY = 'auth_token';
 
 export type ScanState = 'cancelled' | 'ok';

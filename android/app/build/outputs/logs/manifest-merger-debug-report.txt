@@ -1,29 +1,29 @@
 -- Merging decision tree log ---
 provider#androidx.core.content.FileProvider
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:29:9-37:20
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:29:9-37:20
 	android:grantUriPermissions
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:33:13-47
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:33:13-47
 	android:authorities
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:31:13-64
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:31:13-64
 	android:exported
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:32:13-37
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:32:13-37
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:30:13-62
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:30:13-62
 manifest
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
-MERGED from [:capacitor-app] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-haptics] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-9:12
-MERGED from [:capacitor-keyboard] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-preferences] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-share] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-status-bar] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-android] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\prueba-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-11:12
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:2:1-43:12
+MERGED from [:capacitor-app] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-haptics] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-9:12
+MERGED from [:capacitor-keyboard] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-preferences] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-share] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-status-bar] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-android] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-11:12
 MERGED from [org.apache.cordova:framework:14.0.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e47013dec160bb8e8e78795049f410c2\transformed\framework-14.0.1\AndroidManifest.xml:20:1-27:12
 MERGED from [androidx.core:core-splashscreen:1.2.0] C:\Users\Jose\.gradle\caches\8.14.3\transforms\4f5eb2e1ae45a07736e2f6ed862ea36a\transformed\core-splashscreen-1.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\bee8f78bb28e6cb788edd05c601f4778\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:2:1-7:12
@@ -112,18 +112,18 @@ MERGED from [androidx.core:core-viewtree:1.0.0] C:\Users\Jose\.gradle\caches\8.1
 MERGED from [io.ionic.libs:ionbarcode-android:2.0.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\85001380c8fdb71755d1add3d19047c5\transformed\ionbarcode-android-2.0.1\AndroidManifest.xml:2:1-15:12
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e11632a5bf251205f121076c74238bf8\transformed\image-1.0.0-beta1\AndroidManifest.xml:2:1-9:12
 	package
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:2:11-69
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:4:5-38:19
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:4:5-38:19
-MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\prueba-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-9:19
-MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\prueba-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-9:19
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:4:5-38:19
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:4:5-38:19
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-9:19
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:5-9:19
 MERGED from [androidx.camera:camera-core:1.5.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\56cb375767f1e850aea77b64d9f93902\transformed\camera-core-1.5.1\AndroidManifest.xml:23:5-34:19
 MERGED from [androidx.camera:camera-core:1.5.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\56cb375767f1e850aea77b64d9f93902\transformed\camera-core-1.5.1\AndroidManifest.xml:23:5-34:19
 MERGED from [androidx.camera:camera-camera2:1.5.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\bff683ff69470d3cff9e6c0178f2221f\transformed\camera-camera2-1.5.1\AndroidManifest.xml:23:5-34:19
@@ -163,83 +163,83 @@ MERGED from [io.ionic.libs:ionbarcode-android:2.0.1] C:\Users\Jose\.gradle\cache
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e11632a5bf251205f121076c74238bf8\transformed\image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e11632a5bf251205f121076c74238bf8\transformed\image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 	android:extractNativeLibs
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.17.0] C:\Users\Jose\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:10:9-35
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:10:9-35
 	android:label
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:8:9-41
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:8:9-41
 	android:roundIcon
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:9:9-54
 	android:icon
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:7:9-43
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:7:9-43
 	android:allowBackup
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:6:9-35
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:6:9-35
 	android:theme
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:11:9-40
 	android:networkSecurityConfig
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:5:9-69
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:5:9-69
 	android:usesCleartextTraffic
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:12:9-44
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:12:9-44
 activity#io.ionic.starter.MainActivity
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:14:9-27:20
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:14:9-27:20
 	android:label
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:17:13-56
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:17:13-56
 	android:launchMode
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:19:13-44
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:19:13-44
 	android:exported
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:20:13-36
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:20:13-36
 	android:configChanges
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:15:13-148
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:15:13-148
 	android:theme
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:18:13-62
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:18:13-62
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:16:13-41
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:16:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:22:13-25:29
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:22:13-25:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:23:17-69
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:23:17-69
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:23:25-66
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:23:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:24:17-77
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:24:17-77
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:24:27-74
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:24:27-74
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:42:5-67
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:42:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\Jose\.gradle\caches\8.14.3\transforms\cbc0786e615026526014c6805c71c308\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:26:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] C:\Users\Jose\.gradle\caches\8.14.3\transforms\cbc0786e615026526014c6805c71c308\transformed\transport-backend-cct-2.3.3\AndroidManifest.xml:26:5-67
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:42:22-64
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:42:22-64
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:34:13-36:64
+ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:34:13-36:64
 	android:resource
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:36:17-51
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:36:17-51
 	android:name
-		ADDED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml:35:17-67
+		ADDED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml:35:17-67
 uses-sdk
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
-INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
-MERGED from [:capacitor-app] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-app] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-haptics] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-haptics] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-keyboard] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-keyboard] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-preferences] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-preferences] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-share] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-share] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-status-bar] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-status-bar] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-android] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-android] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\prueba-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:6:5-44
-MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\prueba-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:6:5-44
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
+MERGED from [:capacitor-app] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-app] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-barcode-scanner] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\barcode-scanner\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-haptics] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-haptics] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-keyboard] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-keyboard] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-preferences] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-preferences] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\preferences\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-share] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-share] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\share\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-status-bar] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-status-bar] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-android] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-android] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:6:5-44
+MERGED from [:capacitor-cordova-android-plugins] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:6:5-44
 MERGED from [org.apache.cordova:framework:14.0.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e47013dec160bb8e8e78795049f410c2\transformed\framework-14.0.1\AndroidManifest.xml:25:5-44
 MERGED from [org.apache.cordova:framework:14.0.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e47013dec160bb8e8e78795049f410c2\transformed\framework-14.0.1\AndroidManifest.xml:25:5-44
 MERGED from [androidx.core:core-splashscreen:1.2.0] C:\Users\Jose\.gradle\caches\8.14.3\transforms\4f5eb2e1ae45a07736e2f6ed862ea36a\transformed\core-splashscreen-1.2.0\AndroidManifest.xml:20:5-44
@@ -415,13 +415,13 @@ MERGED from [io.ionic.libs:ionbarcode-android:2.0.1] C:\Users\Jose\.gradle\cache
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e11632a5bf251205f121076c74238bf8\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\e11632a5bf251205f121076c74238bf8\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 	android:targetSdkVersion
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\Jose\prueba-escaner\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\android\app\src\main\AndroidManifest.xml
 uses-permission#android.permission.VIBRATE
-ADDED from [:capacitor-haptics] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
+ADDED from [:capacitor-haptics] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:5-66
 	android:name
-		ADDED from [:capacitor-haptics] C:\Users\Jose\prueba-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
+		ADDED from [:capacitor-haptics] C:\Users\Jose\Desktop\PASANTIA PROYECTO\app-escaner\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:7:22-63
 service#androidx.camera.core.impl.MetadataHolderService
 ADDED from [androidx.camera:camera-core:1.5.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\56cb375767f1e850aea77b64d9f93902\transformed\camera-core-1.5.1\AndroidManifest.xml:29:9-33:78
 MERGED from [androidx.camera:camera-camera2:1.5.1] C:\Users\Jose\.gradle\caches\8.14.3\transforms\bff683ff69470d3cff9e6c0178f2221f\transformed\camera-camera2-1.5.1\AndroidManifest.xml:24:9-33:19

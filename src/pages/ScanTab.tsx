@@ -231,8 +231,8 @@ const ScanTab: React.FC = () => {
         return;
       }
       const result = await escanearYBuscarEquipo(location.trim());
-      if (!result){
-        Haptics.impact({style: ImpactStyle.Light})
+      if (!result) {
+        Haptics.impact({ style: ImpactStyle.Light })
         return;
       } // cancelado
 
@@ -255,15 +255,15 @@ const ScanTab: React.FC = () => {
           });
           setLastSaved(saved);
         }
-        Haptics.notification({type: NotificationType.Error});
+        Haptics.notification({ type: NotificationType.Error });
         setErrorMsg(`${error.message} (HTTP ${error.info.status})\n${error.info.url}\nSN="${error.info.serialNumber}"`);
         return;
       }
-      Haptics.notification({type: NotificationType.Error});
+      Haptics.notification({ type: NotificationType.Error });
       const message = error instanceof Error ? error.message : 'Error desconocido al escanear';
       setErrorMsg(message);
     } finally {
-      Haptics.notification({type: NotificationType.Success});
+      Haptics.notification({ type: NotificationType.Success });
       setIsScanning(false);
     }
   };
@@ -329,8 +329,8 @@ const ScanTab: React.FC = () => {
               <IonCol size="12" sizeMd="10" sizeLg="8">
                 <IonCard className="glass-card">
                   <IonCardHeader>
-                    <IonCardTitle>Ubicación / Departamento</IonCardTitle>
-                    <IonCardSubtitle>Selecciona una ubicación válida para habilitar el escáner</IonCardSubtitle>
+                    <IonCardTitle>Departamento Actual</IonCardTitle>
+                    <IonCardSubtitle>Ingresa el departamento donde te encuentras actualmente.</IonCardSubtitle>
                   </IonCardHeader>
                   <IonCardContent>
                     <IonSearchbar
@@ -338,7 +338,7 @@ const ScanTab: React.FC = () => {
                         searchbarRef.current = el;
                       }}
                       value={location}
-                      placeholder={isLoadingDeptos ? 'Cargando departamentos...' : 'Busca y selecciona un departamento'}
+                      placeholder={isLoadingDeptos ? 'Cargando departamentos...' : 'Ingresa un depto.'}
                       onIonInput={(e) => {
                         setLocation(e.detail.value ?? '');
                         setShowSuggestions(true);
@@ -410,7 +410,7 @@ const ScanTab: React.FC = () => {
                 {/* Búsqueda manual por S/N */}
                 <IonCard className="glass-card ion-margin-top">
                   <IonCardHeader>
-                    <IonCardSubtitle>Búsqueda manual</IonCardSubtitle>
+                    <IonCardTitle>Búsqueda Manual</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
                     <IonItem lines="none" className="search-container">
