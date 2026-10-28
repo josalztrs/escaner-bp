@@ -1,5 +1,5 @@
-Escáner de Bienes Nacionales para la Empresa BOLIPUERTOS S.A.
-Desarrollada en Ionic Framework usando React c/Typescript, y Capacitor para crear las builds para móviles. 
+# Escáner de Bienes Nacionales para la Empresa BOLIPUERTOS S.A.
+### Desarrollada en Ionic Framework usando React c/Typescript, y Capacitor para crear las builds para móviles. 
 --------------------------------------
 para modificar la ruta a la que se le puede hacer fetch tienes que cambiar:
 
